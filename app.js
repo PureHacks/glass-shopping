@@ -31,14 +31,14 @@ if ('development' == app.get('env')) {
 
 
 var config = {
-    displayName: "Magic Magpie",
+    displayName: "devlist update",
     clientID: "755482469248-q08tbvotf1f62fd4guhv7riqo9bnhth7.apps.googleusercontent.com",
     clientSecret: "mst-lDnj43oI4yj50sw1obtQ",
     host: "localhost:5000"
 }
 if (process.env.NODE_ENV == "prod") {
     var config = {
-        displayName: "Magic Mushroom",
+        displayName: "shoppinglist update",
         clientID: "716645361625-j2vb7jg318uo6nu44rkjgu8b7letfvjc.apps.googleusercontent.com",
         clientSecret: "iUG7BPRnAy_NNE8BDmdp5n_8",
         host: "glasstest.herokuapp.com"
