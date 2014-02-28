@@ -41,7 +41,7 @@ if (process.env.NODE_ENV == "prod") {
         displayName: "shoppinglist update",
         clientID: "716645361625-j2vb7jg318uo6nu44rkjgu8b7letfvjc.apps.googleusercontent.com",
         clientSecret: "iUG7BPRnAy_NNE8BDmdp5n_8",
-        host: "glass-shopping.herokuapp.com/"
+        host: "glass-shopping.herokuapp.com"
     }
 }
 
