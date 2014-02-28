@@ -1,0 +1,35 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"name" : "Glass Shopping",
+			"file_exclude_patterns": [
+				"*.gitignore"
+				,"*.docx"
+				,"*.md"
+				,"*.sublime-workspace"
+				,"*.sublime-project"
+				,".slugignore"
+				,"LICENSE"
+				,".travis.yml"
+				,".jshintrc"
+				,".bowerrc"
+				,".nodemonignore"
+			],
+			"folder_exclude_patterns": [
+				"target"
+				,"logs"
+				,".idea"
+				,".idea_modules"
+				,"node_modules"
+			]
+		}
+	]
+	,"settings":
+    {
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true,
+		"detect_indentation" : false
+	}
+}
