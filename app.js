@@ -91,6 +91,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	var notification = req.body;
 	var itemId = notification.itemId;
 	console.log(notification);
+	console.log("XXXXXXXXXXXXXXX");
 	switch (notification.userActions[0].type) {
 		
 		case "CUSTOM":
@@ -102,6 +103,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			console.log("action DELETE");
 			break;
 	};
+	console.log("XXXXXXXXXXXXXXX");
 	res.end();
 });
 
