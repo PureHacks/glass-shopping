@@ -47,13 +47,16 @@ if (process.env.NODE_ENV == "prod") {
 	}
 }
 
+var hostBaseUrl = "http://" + config.host;
+
 //called when app needs authentification
 var authenticateApp = function(res, oauth2Client){
 	// generates a url that allows offline access and asks permissions
 	// for Mirror API scope.
 	var url = oauth2Client.generateAuthUrl({
 		access_type: 'offline',
-		scope: 'https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location'
+		//scope: 'https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location'
+		scope: 'https://www.googleapis.com/auth/glass.timeline'
 	});
 	res.redirect(url);
 };
@@ -72,80 +75,178 @@ var glassApi = glassMirrorApi(config, authenticateApp);
 
 
 app.get('/', function(req, res){
-	glassApi.isAuthenticated(res, gotToken);
+	glassApi.isAuthenticated(res, subscribeToShoppinglistUpdates);
 	res.render('index', { title: 'Signed up for Shopping list' });
-	res.end();
-});
-
-
-
-
-app.post('/notify/timeline', function(req, res){
-	var notification = req.body;
-	var itemId = notification.itemId;
-	console.log("/notify/timeline", notification);
-	switch (notification.userActions[0].type) {
-		case "SHARE":
-			glassApi.getTimelineItem(function(data){
-				console.log("got share item", data.attachments[0].contentUrl);
-				// var img = data.attachments[0].contentUrl;
-				// insertImgTimelineItem(img, genericFailure, genericSuccess)
-			});
-
-			// perform share
-			break;
-		case "REPLY":
-			// perform reply
-			console.log("action reply");
-			break;
-		case "DELETE":
-			// perform delete
-			console.log("action DELETE");
-			break;
-		case "LAUNCH":
-			// perform launch
-			console.log("action LAUNCH");
-			break;
-		case "CUSTOM":
-			// perform custom
-			console.log("action CUSTOM");
-			break;
-	};
 	res.end();
 });
 
 //authenticated
 app.get('/oauth2callback', function(req, res){
 	// if we're able to grab the token, redirect the user back to the main page
-	glassApi.getToken(req.query.code, genericFailure, function(){ res.redirect('/'); });
+	glassApi.getToken(req.query.code, genericFailure, function(){ res.redirect('/getNearByShoppinglists'); });
+});
+
+
+app.post('/notify/timeline/shoppinglist', function(req, res){
+	var notification = req.body;
+	var itemId = notification.itemId;
+	console.log(notification);
+	switch (notification.userActions[0].type) {
+		
+		case "CUSTOM":
+			// perform custom
+			console.log("action CUSTOM");
+			break;
+		case "DELETE":
+			// perform custom
+			console.log("action DELETE");
+			break;
+	};
+	res.end();
+});
+
+
+// app.post('/notify/timeline/test', function(req, res){
+// 	var notification = req.body;
+// 	var itemId = notification.itemId;
+// 	console.log("/notify/timeline", notification);
+// 	switch (notification.userActions[0].type) {
+// 		case "SHARE":
+// 			glassApi.getTimelineItem(genericFailure, function(data){
+// 				console.log("got share item", data.attachments[0].contentUrl);
+// 				// var img = data.attachments[0].contentUrl;
+// 				// insertImgTimelineItem(img, genericFailure, genericSuccess)
+// 			});
+
+// 			// perform share
+// 			break;
+// 		case "REPLY":
+// 			// perform reply
+// 			console.log("action reply");
+// 			break;
+// 		case "DELETE":
+// 			// perform delete
+// 			console.log("action DELETE");
+// 			break;
+// 		case "LAUNCH":
+// 			// perform launch
+// 			console.log("action LAUNCH");
+// 			break;
+// 		case "CUSTOM":
+// 			// perform custom
+// 			console.log("action CUSTOM");
+// 			break;
+// 	};
+// 	res.end();
+// });
+
+
+app.get('/getNearByShoppinglists', function(req, res){
+	//todo: add location test
+	glassApi.isAuthenticated(res, pushShoppinglistUpdates);
+	
+	res.render('index', { title: 'Push nearby Shopping list' });
+	res.end();
 });
 
 
 
+// var gotToken = function() {
+// 	//glassApi.listTimeline(genericFailure, genericSuccess);
+// 	glassApi.clearTimeline(genericFailure, genericSuccess);
+// 	glassApi.insertContact({
+// 			"id": "shoppingCart",
+// 			"displayName": config.displayName,
+// 			"priority": 7,
+// 			"acceptCommands": [
+// 				{"type": "POST_AN_UPDATE"},
+// 				{"type": "TAKE_A_NOTE"}
+// 			]
+// 		}, genericFailure, genericSuccess);
+// 	glassApi.insertTimelineItem({
+// 			//"bundleId": "main",
+// 			"html": "<article>\n Subscibed to Shoppinglist</article>",
+// 			"speakableText": "You have subscribed for your Shoppinglist",
+// 			"menuItems": [{
+// 				"action": "CUSTOM",
+// 				"id": "GotIt",
+// 				"values": [{
+// 						"displayName": "GotIt",
+// 						"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"}
+// 				}]},
+// 				{
+// 					"action": "DELETE"
+// 			  	}
+// 			  ],
+// 			"notification": { "level": "DEFAULT" }
+// 		},genericFailure, genericSuccess);
+// 	//glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/test", "userTokenTest", "verifyTokenTest", genericFailure, genericSuccess);
+// 	//subscribeToShoppinglistUpdates();
+// };
 
-var gotToken = function() {
-	var date = new Date();
-	glassApi.listTimeline(genericFailure, genericSuccess);
-	glassApi.insertContact({
-			"id": "harold",
-			"displayName": config.displayName,
-			"priority": 7,
-			"acceptCommands": [
-				{"type": "POST_AN_UPDATE"},
-				{"type": "TAKE_A_NOTE"}
-			]
-		}, genericFailure, genericSuccess);
+
+var subscribeToShoppinglistUpdates = function() {
+	glassApi.clearTimeline(genericFailure, genericSuccess);
 	glassApi.insertTimelineItem({
 			//"bundleId": "main",
-			"html": "<article>\n <b>" + date.toLocaleTimeString() + "<br/>durp</b></article>",
-			"speakableText": "Hellooooo duurp",
-			"menuItems": [{"action": "DELETE"}],
+			"html": "<article>\n Subscibed to Shoppinglist</article>",
+			"speakableText": "You have subscribed for your Shoppinglist",
+			"menuItems": [{
+				"action": "DELETE"
+			}],
 			"notification": { "level": "DEFAULT" }
 		},genericFailure, genericSuccess);
-	glassApi.clearTimeline(genericFailure, genericSuccess);
-	glassApi.subscribeToNotifications("http://" + config.host + "/notify/timeline", "userTokenTest", "verifyTokenTest", genericFailure, genericSuccess);
+	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerify", genericFailure, genericSuccess);
 };
 
+
+var shoppingListTimelineItemMarkup = function(bundleId, itemName){
+	return {
+		"bundleId": bundleId,
+		"sourceItemId" : itemName,
+		"html": "<article>" + itemName + "</article>",
+		"speakableText": "You have subscribed for your Shoppinglist",
+		"menuItems": [
+			{
+				"action": "CUSTOM",
+				"id": "GotIt",
+				"payload" : itemName,
+				"removeWhenSelected" : true,
+				"values": [{
+						"displayName": "Got It",
+						"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
+				}]
+			}
+		],
+		"notification": { "level": "DEFAULT" }
+	}
+};
+
+var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
+	return {
+		"bundleId": bundleId,
+		"isBundleCover" : true,
+		"html": "<article><ul><li>" + items.join("</li><li>") + "</li></ul></article>",
+		"speakableText": "Shopping list: " + items.join(" "),
+		"notification": { "level": "DEFAULT" }
+	}
+};
+var pushShoppingList = function(items){
+	var bundleId = "ShoppinglistUpdates";
+
+	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items),genericFailure, genericSuccess);
+	for(var i = 0; i < items.length; i++){
+		glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, items[i]),genericFailure, genericSuccess);	
+	}
+};
+
+
+var pushShoppinglistUpdates = function() {
+	glassApi.clearTimeline(genericFailure, genericSuccess);
+	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "duppVerify", genericFailure, genericSuccess);
+	pushShoppingList(["Cheese", "Salad", "Bread", "Milk"]);
+	console.log("xxxxxxxxxxx");
+};
 
 
 http.createServer(app).listen(app.get('port'), function(){

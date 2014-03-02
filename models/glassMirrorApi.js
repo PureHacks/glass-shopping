@@ -13,7 +13,6 @@ module.exports = function(config, onNeedAuthentification) {
 				console.log("error retrieving Mirror API reference", err);
 				return;
 			}
-			console.log("got mirror");
 			mirror = client.mirror;
 		});
 	};
@@ -51,10 +50,14 @@ module.exports = function(config, onNeedAuthentification) {
 	glass.getToken = function(code, errorCallback, successCallback) {
 		oauth2Client.getToken(code, function(err, tokens){
 			if (!!err){
-				errorCallback(err);
-			} else {
+				if(typeof errorCallback == "function"){
+					errorCallback(err);
+				}
+			}else{
 				oauth2Client.credentials = tokens;
-				successCallback();
+				if(typeof successCallback == "function"){
+					successCallback(tokens);
+				}
 			}
 		});
 	};
@@ -64,10 +67,15 @@ module.exports = function(config, onNeedAuthentification) {
 		mirror.timeline.list()
 			.withAuthClient(oauth2Client)
 			.execute(function(err, data){
-				if (!!err)
-					errorCallback(err);
-				else
-					successCallback(data);
+				if (!!err){
+					if(typeof errorCallback == "function"){
+						errorCallback(err);
+					}
+				}else{
+					if(typeof successCallback == "function"){
+						successCallback(data);
+					}
+				}
 			});
 	};
 
@@ -76,10 +84,15 @@ module.exports = function(config, onNeedAuthentification) {
 		mirror.contacts.insert(contact)
 			.withAuthClient(oauth2Client)
 			.execute(function(err, data){
-				if (!!err)
-					errorCallback(err);
-				else
-					successCallback(data);
+				if (!!err){
+					if(typeof errorCallback == "function"){
+						errorCallback(err);
+					}
+				}else{
+					if(typeof successCallback == "function"){
+						successCallback(data);
+					}
+				}
 			});
 	};
 
@@ -88,10 +101,15 @@ module.exports = function(config, onNeedAuthentification) {
 		mirror.timeline.insert(timelineItem)
 			.withAuthClient(oauth2Client)
 			.execute(function(err, data){
-				if (!!err)
-					errorCallback(err);
-				else
-					successCallback(data);
+				if (!!err){
+					if(typeof errorCallback == "function"){
+						errorCallback(err);
+					}
+				}else{
+					if(typeof successCallback == "function"){
+						successCallback(data);
+					}
+				}
 			});
 	};
 
@@ -123,10 +141,15 @@ module.exports = function(config, onNeedAuthentification) {
 			})
 			.withAuthClient(oauth2Client)
 			.execute(function(err, data){
-				if (!!err)
-					errorCallback(err);
-				else
-					successCallback(data);
+				if (!!err){
+					if(typeof errorCallback == "function"){
+						errorCallback(err);
+					}					
+				}else{
+					if(typeof successCallback == "function"){
+						successCallback(data);
+					}
+				}
 			});
 	};
 
@@ -137,9 +160,10 @@ module.exports = function(config, onNeedAuthentification) {
 			.withAuthClient(oauth2Client)
 			.execute(function(err, data){
 				if (!!err) {
-					errorCallback(err);
-				}
-				else {
+					if(typeof errorCallback == "function"){
+						errorCallback(err);
+					}
+				}else{
 					for (var i = 0; i < data.items.length; i++) {
 						var itemId = data.items[i].id;
 						console.log("delete ITEM ID: ", itemId);
@@ -159,22 +183,33 @@ module.exports = function(config, onNeedAuthentification) {
 			})
 			.withAuthClient(oauth2Client)
 			.execute(function(err, data){
-				if (!!err)
-					errorCallback(err);
-				else
-					successCallback(data);
+				if (!!err){
+					if(typeof errorCallback == "function"){
+						errorCallback(err);
+					}
+				}else{
+					if(typeof successCallback == "function"){
+						successCallback(data);
+					}
+				}
+					
 			});
 	}
 
 
-	glass.getTimelineItem = function(itemId, onSuccess) {
+	glass.getTimelineItem = function(itemId, errorCallback, successCallback) {
 		mirror.timeline.get({"id": itemId})
 			.withAuthClient(oauth2Client)
 			.execute(function(err, data){
-				if (!!err)
-					failure(err);
-				else
-					onSuccess(data);
+				if (!!err){
+					if(typeof errorCallback == "function"){
+						errorCallback(err);
+					}
+				}else{
+					if(typeof successCallback == "function"){
+						successCallback(data);
+					}
+				}
 			});
 	};
 
