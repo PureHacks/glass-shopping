@@ -97,6 +97,11 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 		case "CUSTOM":
 			// perform custom
 			console.log("action CUSTOM");
+			glassApi.getTimelineItem(itemId, genericFailure, function(data){
+				console.log("got share item", data);
+				// var img = data.attachments[0].contentUrl;
+				// insertImgTimelineItem(img, genericFailure, genericSuccess)
+			});
 			break;
 		case "DELETE":
 			// perform custom
@@ -114,7 +119,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 // 	console.log("/notify/timeline", notification);
 // 	switch (notification.userActions[0].type) {
 // 		case "SHARE":
-// 			glassApi.getTimelineItem(genericFailure, function(data){
+// 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
 // 				console.log("got share item", data.attachments[0].contentUrl);
 // 				// var img = data.attachments[0].contentUrl;
 // 				// insertImgTimelineItem(img, genericFailure, genericSuccess)
@@ -211,7 +216,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"menuItems": [
 			{
 				"action": "CUSTOM",
-				"id": "GotIt",
+				//"id": "GotIt",
 				"payload" : itemName,
 				"removeWhenSelected" : true,
 				"values": [{
@@ -247,7 +252,6 @@ var pushShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, genericSuccess);
 	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "duppVerify", genericFailure, genericSuccess);
 	pushShoppingList(["Cheese", "Salad", "Bread", "Milk"]);
-	console.log("xxxxxxxxxxx");
 };
 
 
