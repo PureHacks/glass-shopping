@@ -10,5 +10,8 @@
     "jade": "~1.1.5",
     "logfmt": "~0.18.1",
     "googleapis": "~0.4.7"
+  },
+   "engines": {
+    "node": "0.10.x"
   }
 }
