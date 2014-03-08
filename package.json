@@ -9,9 +9,11 @@
     "express": "~3.4.8",
     "jade": "~1.1.5",
     "logfmt": "~0.18.1",
-    "googleapis": "~0.4.7"
+    "googleapis": "~0.4.7",
+    "mongoose": "~3.8.8",
+    "lodash": "~2.4.1"
   },
-   "engines": {
+  "engines": {
     "node": "0.10.x"
   }
 }

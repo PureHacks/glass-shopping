@@ -1,3 +1,5 @@
+"use strict";
+
 
 /**
  * Module dependencies.
@@ -7,7 +9,11 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
+var mongoose = require('mongoose');
 var glassMirrorApi = require('./models/glassMirrorApi');
+var _ = require('lodash');
+
+
 
 var app = express();
 
@@ -35,19 +41,28 @@ var config = {
 	clientID: "755482469248-q08tbvotf1f62fd4guhv7riqo9bnhth7.apps.googleusercontent.com",
 	clientSecret: "mst-lDnj43oI4yj50sw1obtQ",
 	host: "localhost:5000",
-	oauth2callbackRoute : "/oauth2callback"
-}
+	oauth2callbackRoute : "/oauth2callback",
+    mongooseUrl : "mongodb://glass-shopping-app:7e441f609f@oceanic.mongohq.com:10074/app22628793"
+};
+
 if (process.env.NODE_ENV == "prod") {
-	config = {
-		displayName: "shoppinglist update",
-		clientID: "716645361625-j2vb7jg318uo6nu44rkjgu8b7letfvjc.apps.googleusercontent.com",
-		clientSecret: "iUG7BPRnAy_NNE8BDmdp5n_8",
-		host: "glass-shopping.herokuapp.com",
-		oauth2callbackRoute : "/oauth2callback"
-	}
+    config = _.extend(config, {
+        displayName: "shoppinglist update",
+        clientID: "716645361625-j2vb7jg318uo6nu44rkjgu8b7letfvjc.apps.googleusercontent.com",
+        clientSecret: "iUG7BPRnAy_NNE8BDmdp5n_8",
+        host: "glass-shopping.herokuapp.com"
+    });
 }
 
+
 var hostBaseUrl = "http://" + config.host;
+
+mongoose.connect(config.mongooseUrl);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  // yay!
+});
 
 //called when app needs authentification
 var authenticateApp = function(res, oauth2Client){
@@ -73,10 +88,12 @@ var genericFailure = function(data) {
 
 var glassApi = glassMirrorApi(config, authenticateApp);
 
+app.get('/', routes.index);
 
-app.get('/', function(req, res){
+
+app.get('/signup', function(req, res){
 	glassApi.isAuthenticated(res, subscribeToShoppinglistUpdates);
-	res.render('index', { title: 'Signed up for Shopping list' });
+	res.render('signupConfirmation', { title: 'Signed up for Shopping list' });
 	res.end();
 });
 
@@ -90,8 +107,8 @@ app.get('/oauth2callback', function(req, res){
 app.post('/notify/timeline/shoppinglist', function(req, res){
 	var notification = req.body;
 	var itemId = notification.itemId;
-	console.log(notification);
-	console.log("XXXXXXXXXXXXXXX");
+	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist");
+    console.log(notification);
 	switch (notification.userActions[0].type) {
 		
 		case "CUSTOM":
