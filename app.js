@@ -122,17 +122,17 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
 	switch (notification.userActions[0].type) {
-		case "CUSTOM":
+		case "DELETE":
 			// perform custom
 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
 				console.log("XXXXXXXXXX item to delete", data);
 				//glassApi.patchTimeline()()
-				glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
+				//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 			});
 			break;
-		case "DELETE":
+		case "CUSTOM":
 			// perform custom
-			console.log("action DELETE");
+			console.log("action CUSTOM");
 			break;
 	};
 	res.end();
@@ -187,7 +187,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"speakableText": "You have subscribed for your Shoppinglist",
 		"menuItems": [
 			{
-				"action": "CUSTOM",
+				"action": "DELETE",
 				"id": "GotIt",
 				"payload" : itemName,
 				"removeWhenSelected" : true,
