@@ -177,7 +177,7 @@ var subscribeToShoppinglistUpdates = function() {
 			}],
 			"notification": { "level": "DEFAULT" }
 		},genericFailure, genericSuccess);
-		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerify", genericFailure, function(){
+		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerifyxxx", genericFailure, function(){
 			console.log("Signed up successfully");
 		});
 	});
@@ -238,7 +238,7 @@ var pushShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, function(){
 		pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
 	});
-	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerify", genericFailure, genericSuccess);
+	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerifyxxx", genericFailure, genericSuccess);
 };
 
 
