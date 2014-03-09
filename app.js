@@ -96,6 +96,14 @@ var glassApi = glassMirrorApi(config, authenticateApp);
 app.get('/', routes.index);
 
 
+app.get('/authenticate', function(req, res){
+	glassApi.isAuthenticated(res, function(){
+		genericSuccess("authenticated");
+	});
+	res.render('signupConfirmation', { title: 'Authenticated for Shopping list' });
+	res.end();
+});
+
 app.get('/signup', function(req, res){
 	glassApi.isAuthenticated(res, subscribeToShoppinglistUpdates);
 	res.render('signupConfirmation', { title: 'Signed up for Shopping list' });
