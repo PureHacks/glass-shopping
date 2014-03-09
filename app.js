@@ -80,6 +80,11 @@ var genericSuccess = function(data) {
 	console.log('success', data);
 };
 
+var genericSuccessNoDataLog = function() {
+    console.log('success - plain');
+};
+
+
 
 var genericFailure = function(data) {
 	console.log('failure', data);
@@ -108,23 +113,18 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	var notification = req.body;
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist");
-    console.log(notification);
 	switch (notification.userActions[0].type) {
-		
 		case "CUSTOM":
 			// perform custom
-			console.log("action CUSTOM");
 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
                 console.log("XXXXXXXXXX item to delete", data.sourceItemId);
-                glassApi.deleteTimelineItem(data.itemId, genericFailure, function(){
-                    console.log("XXXXXXXXXX item deleted");
-                });
+                glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 			});
 			break;
-		case "DELETE":
-			// perform custom
-			console.log("action DELETE");
-			break;
+		// case "DELETE":
+		// 	// perform custom
+		// 	console.log("action DELETE");
+		// 	break;
 	};
 	res.end();
 });
@@ -190,7 +190,7 @@ var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
 	}
 };
 var pushShoppingList = function(items){
-	var bundleId = "ShoppinglistUpdates";
+	var bundleId = "ShoppinglistUpdates " +  new Date().toLocaleTimeString();
 
 	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items),genericFailure, genericSuccess);
 	for(var i = 0; i < items.length; i++){
@@ -200,9 +200,10 @@ var pushShoppingList = function(items){
 
 
 var pushShoppinglistUpdates = function() {
-	glassApi.clearTimeline(genericFailure, genericSuccess);
-	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "duppVerify", genericFailure, genericSuccess);
-	pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
+	glassApi.clearTimeline(genericFailure, function(){
+        //glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "duppVerify", genericFailure, genericSuccess);
+        pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
+    });
 };
 
 
