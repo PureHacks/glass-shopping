@@ -120,7 +120,7 @@ app.get('/oauth2callback', function(req, res){
 
 
 app.post('/notify/timeline/shoppinglist', function(req, res){
-	console.log("shoppinglist");
+	console.log("Notify shoppinglist");
 	var notification = req.body;
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
@@ -169,16 +169,16 @@ app.get('/clear/all', function(req, res){
 
 var subscribeToShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, function(){
-		glassApi.insertTimelineItem({
-			"html": "<article>\n Subscibed to Shoppinglist</article>",
-			"speakableText": "You have subscribed for your Shoppinglist",
-			"menuItems": [{
-				"action": "DELETE"
-			}],
-			"notification": { "level": "DEFAULT" }
-		},genericFailure, genericSuccess);
 		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerifyxxx", genericFailure, function(){
 			console.log("Signed up successfully");
+			glassApi.insertTimelineItem({
+				"html": "<article>\n Subscibed to Shoppinglist</article>",
+				"speakableText": "You have subscribed for your Shoppinglist",
+				"menuItems": [{
+					"action": "DELETE"
+				}],
+				"notification": { "level": "DEFAULT" }
+			},genericFailure, genericSuccess);
 		});
 	});
 };
@@ -191,20 +191,20 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"html": "<article>" + itemName + "</article>",
 		"speakableText": "You have subscribed for your Shoppinglist",
 		"menuItems": [{
-				"action": "CUSTOM",
-				"id": "GotIt",
+				"action": "DELETE",
+				"id": "GotIt-Delete",
 				"payload" : itemName,
 				"removeWhenSelected" : true,
 				"values": [{
 					"displayName": "Got It",
 					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
 				}]},{
-				"action": "DELETE",
-				"id": "GotIt-Delete",
+				"action": "CUSTOM",
+				"id": "GotIt",
 				"payload" : itemName,
 				"removeWhenSelected" : true,
 				"values": [{
-					"displayName": "Got It-D",
+					"displayName": "Got It (2)",
 					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
 				}]
 		}],
