@@ -190,9 +190,9 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"menuItems": [
 			{
 				"action": "CUSTOM",
-				"id": "GotIt",
+				//"id": "GotIt",
 				"payload" : itemName,
-				"removeWhenSelected" : true,
+				//"removeWhenSelected" : true,
 				"values": [{
 						"displayName": "Got It",
 						"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
