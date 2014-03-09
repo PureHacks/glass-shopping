@@ -194,7 +194,7 @@ module.exports = function(config, onNeedAuthentification) {
 				}
 					
 			});
-	}
+	};
 
 
 	glass.getTimelineItem = function(itemId, errorCallback, successCallback) {

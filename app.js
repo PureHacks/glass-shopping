@@ -100,7 +100,7 @@ app.get('/signup', function(req, res){
 //authenticated
 app.get('/oauth2callback', function(req, res){
 	// if we're able to grab the token, redirect the user back to the main page
-	glassApi.getToken(req.query.code, genericFailure, function(){ res.redirect('/getNearByShoppinglists'); });
+	glassApi.getToken(req.query.code, genericFailure, function(){ res.redirect('/signup'); });
 });
 
 
@@ -129,84 +129,18 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	res.end();
 });
 
-
-// app.post('/notify/timeline/test', function(req, res){
-// 	var notification = req.body;
-// 	var itemId = notification.itemId;
-// 	console.log("/notify/timeline", notification);
-// 	switch (notification.userActions[0].type) {
-// 		case "SHARE":
-// 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
-// 				console.log("got share item", data.attachments[0].contentUrl);
-// 				// var img = data.attachments[0].contentUrl;
-// 				// insertImgTimelineItem(img, genericFailure, genericSuccess)
-// 			});
-
-// 			// perform share
-// 			break;
-// 		case "REPLY":
-// 			// perform reply
-// 			console.log("action reply");
-// 			break;
-// 		case "DELETE":
-// 			// perform delete
-// 			console.log("action DELETE");
-// 			break;
-// 		case "LAUNCH":
-// 			// perform launch
-// 			console.log("action LAUNCH");
-// 			break;
-// 		case "CUSTOM":
-// 			// perform custom
-// 			console.log("action CUSTOM");
-// 			break;
-// 	};
-// 	res.end();
-// });
+//http://itouchmap.com/latlong.html
+app.get('/location/ping/:lat/:long', function(req, res){
+    var latitude = req.body.lat || 43.646357;
+    var longitude = req.body.long || -79.395682;
 
 
-app.get('/getNearByShoppinglists', function(req, res){
 	//todo: add location test
 	glassApi.isAuthenticated(res, pushShoppinglistUpdates);
 	
-	res.render('index', { title: 'Push nearby Shopping list' });
+	res.render('index', { title: 'Location Ping send (' + latitude + '/' +longitude+')'});
 	res.end();
 });
-
-
-
-// var gotToken = function() {
-// 	//glassApi.listTimeline(genericFailure, genericSuccess);
-// 	glassApi.clearTimeline(genericFailure, genericSuccess);
-// 	glassApi.insertContact({
-// 			"id": "shoppingCart",
-// 			"displayName": config.displayName,
-// 			"priority": 7,
-// 			"acceptCommands": [
-// 				{"type": "POST_AN_UPDATE"},
-// 				{"type": "TAKE_A_NOTE"}
-// 			]
-// 		}, genericFailure, genericSuccess);
-// 	glassApi.insertTimelineItem({
-// 			//"bundleId": "main",
-// 			"html": "<article>\n Subscibed to Shoppinglist</article>",
-// 			"speakableText": "You have subscribed for your Shoppinglist",
-// 			"menuItems": [{
-// 				"action": "CUSTOM",
-// 				"id": "GotIt",
-// 				"values": [{
-// 						"displayName": "GotIt",
-// 						"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"}
-// 				}]},
-// 				{
-// 					"action": "DELETE"
-// 			  	}
-// 			  ],
-// 			"notification": { "level": "DEFAULT" }
-// 		},genericFailure, genericSuccess);
-// 	//glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/test", "userTokenTest", "verifyTokenTest", genericFailure, genericSuccess);
-// 	//subscribeToShoppinglistUpdates();
-// };
 
 
 var subscribeToShoppinglistUpdates = function() {
