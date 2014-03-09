@@ -57,6 +57,8 @@ if (process.env.NODE_ENV == "prod") {
 
 var hostBaseUrl = "http://" + config.host;
 
+//http://mongoosejs.com/docs/index.html
+//https://devcenter.heroku.com/articles/mongohq#mongohq-web-tools
 mongoose.connect(config.mongooseUrl);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -128,7 +130,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
 				console.log("XXXXXXXXXX item to delete", data);
 				//glassApi.patchTimeline()()
-				//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
+				glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 			});
 			break;
 		case "DELETE":
@@ -171,7 +173,7 @@ var subscribeToShoppinglistUpdates = function() {
 			"html": "<article>\n Subscibed to Shoppinglist</article>",
 			"speakableText": "You have subscribed for your Shoppinglist",
 			"menuItems": [{
-				"action": "DELETE"
+				"action": "CUSTOM"
 			}],
 			"notification": { "level": "DEFAULT" }
 		},genericFailure, genericSuccess);
@@ -190,7 +192,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"speakableText": "You have subscribed for your Shoppinglist",
 		"menuItems": [{
 				"action": "CUSTOM",
-				"id": "GotIt",
+				//"id": "GotIt",
 				"payload" : itemName,
 				"removeWhenSelected" : true,
 				"values": [{
