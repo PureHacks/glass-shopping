@@ -165,7 +165,7 @@ app.get('/clear/all', function(req, res){
 
 
 var subscribeToShoppinglistUpdates = function() {
-	glassApi.clearTimeline(genericFailure, function(){
+	//glassApi.clearTimeline(genericFailure, function(){
 		glassApi.insertTimelineItem({
 			"html": "<article>\n Subscibed to Shoppinglist</article>",
 			"speakableText": "You have subscribed for your Shoppinglist",
@@ -174,8 +174,10 @@ var subscribeToShoppinglistUpdates = function() {
 			}],
 			"notification": { "level": "DEFAULT" }
 		},genericFailure, genericSuccess);
-		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerify", genericFailure, genericSuccess);
-	});
+		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerify", genericFailure, function(){
+			console.log("Signed up successfully");
+		});
+	//});
 };
 
 
