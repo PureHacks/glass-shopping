@@ -122,7 +122,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
 	switch (notification.userActions[0].type) {
-		case "DELETE":
+		case "CUSTOM":
 			// perform custom
 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
 				console.log("XXXXXXXXXX item to delete", data);
@@ -130,9 +130,9 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 				//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 			});
 			break;
-		case "CUSTOM":
+		case "DELETE":
 			// perform custom
-			console.log("action CUSTOM");
+			console.log("action DELETE");
 			break;
 	};
 	res.end();
@@ -187,7 +187,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"speakableText": "You have subscribed for your Shoppinglist",
 		"menuItems": [
 			{
-				"action": "DELETE",
+				"action": "CUSTOM",
 				"id": "GotIt",
 				"payload" : itemName,
 				"removeWhenSelected" : true,
@@ -198,7 +198,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 			}
 		],
 		"notification": { "level": "DEFAULT" }
-	}
+	};
 };
 
 var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
@@ -208,7 +208,7 @@ var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
 		"html": "<article>" + new Date().toLocaleTimeString() + "<ul><li>" + items.join("</li><li>") + "</li></ul></article>",
 		"speakableText": "Shopping list: " + items.join(" "),
 		"notification": { "level": "DEFAULT" }
-	}
+	};
 };
 var pushShoppingList = function(items){
 	var bundleId = "ShoppinglistUpdates " +  new Date().toLocaleTimeString();
