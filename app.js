@@ -115,11 +115,10 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			// perform custom
 			console.log("action CUSTOM");
 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
-
-				console.log("got share item", data);
-				//data.sourceItemId
-				// var img = data.attachments[0].contentUrl;
-				// insertImgTimelineItem(img, genericFailure, genericSuccess)
+                console.log("XXXXXXXXXX item to delete", data.sourceItemId);
+                glassApi.deleteTimelineItem(data.itemId, genericFailure, function(){
+                    console.log("XXXXXXXXXX item deleted");
+                });
 			});
 			break;
 		case "DELETE":
@@ -127,7 +126,6 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			console.log("action DELETE");
 			break;
 	};
-	console.log("XXXXXXXXXXXXXXX");
 	res.end();
 });
 
