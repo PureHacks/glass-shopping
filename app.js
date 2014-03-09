@@ -208,7 +208,8 @@ var pushShoppingList = function(items){
 
 	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items),genericFailure, genericSuccess);
 	for(var i = 0; i < items.length; i++){
-		glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, items[i]),genericFailure, genericSuccess);	
+		console.log("skip insertTimelineItem");
+		//glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, items[i]),genericFailure, genericSuccess);	
 	}
 };
 
