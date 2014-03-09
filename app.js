@@ -142,6 +142,18 @@ app.get('/location/ping/:lat/:long', function(req, res){
 	res.end();
 });
 
+app.get('/clear/all', function(req, res){
+    glassApi.isAuthenticated(res, function(){
+        glassApi.clearTimeline(genericFailure, function(){
+            res.redirect('/');
+            res.end(); 
+        });
+    });
+});
+
+
+
+
 
 var subscribeToShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, genericSuccess);
