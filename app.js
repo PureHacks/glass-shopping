@@ -42,16 +42,16 @@ var config = {
 	clientSecret: "mst-lDnj43oI4yj50sw1obtQ",
 	host: "localhost:5000",
 	oauth2callbackRoute : "/oauth2callback",
-    mongooseUrl : "mongodb://glass-shopping-app:7e441f609f@oceanic.mongohq.com:10074/app22628793"
+	mongooseUrl : "mongodb://glass-shopping-app:7e441f609f@oceanic.mongohq.com:10074/app22628793"
 };
 
 if (process.env.NODE_ENV == "prod") {
-    config = _.extend(config, {
-        displayName: "shoppinglist update",
-        clientID: "716645361625-j2vb7jg318uo6nu44rkjgu8b7letfvjc.apps.googleusercontent.com",
-        clientSecret: "iUG7BPRnAy_NNE8BDmdp5n_8",
-        host: "glass-shopping.herokuapp.com"
-    });
+	config = _.extend(config, {
+		displayName: "shoppinglist update",
+		clientID: "716645361625-j2vb7jg318uo6nu44rkjgu8b7letfvjc.apps.googleusercontent.com",
+		clientSecret: "iUG7BPRnAy_NNE8BDmdp5n_8",
+		host: "glass-shopping.herokuapp.com"
+	});
 }
 
 
@@ -81,7 +81,7 @@ var genericSuccess = function(data) {
 };
 
 var genericSuccessNoDataLog = function() {
-    console.log('success - plain');
+	console.log('success - plain');
 };
 
 
@@ -117,9 +117,9 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 		case "CUSTOM":
 			// perform custom
 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
-                console.log("XXXXXXXXXX item to delete", data.sourceItemId);
-                //glassApi.patchTimeline
-                glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
+				console.log("XXXXXXXXXX item to delete", data.sourceItemId);
+				//glassApi.patchTimeline
+				glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 			});
 			break;
 		// case "DELETE":
@@ -132,8 +132,8 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 
 //http://itouchmap.com/latlong.html
 app.get('/location/ping/:lat/:long', function(req, res){
-    var latitude = req.body.lat || 43.646357;
-    var longitude = req.body.long || -79.395682;
+	var latitude = req.body.lat || 43.646357;
+	var longitude = req.body.long || -79.395682;
 
 	//todo: add location test
 	glassApi.isAuthenticated(res, pushShoppinglistUpdates);
@@ -145,11 +145,11 @@ app.get('/location/ping/:lat/:long', function(req, res){
 
 
 app.get('/clear/all', function(req, res){
-    glassApi.isAuthenticated(res, function(){
-        glassApi.clearTimeline(genericFailure, genericSuccess);
-    });
-    res.redirect('/');
-    res.end(); 
+	glassApi.isAuthenticated(res, function(){
+		glassApi.clearTimeline(genericFailure, genericSuccess);
+	});
+	res.redirect('/');
+	res.end(); 
 });
 
 
@@ -157,8 +157,8 @@ app.get('/clear/all', function(req, res){
 
 
 var subscribeToShoppinglistUpdates = function() {
-	glassApi.clearTimeline(genericFailure, genericSuccess);
-	glassApi.insertTimelineItem({
+	glassApi.clearTimeline(genericFailure, function(){
+		glassApi.insertTimelineItem({
 			//"bundleId": "main",
 			"html": "<article>\n Subscibed to Shoppinglist</article>",
 			"speakableText": "You have subscribed for your Shoppinglist",
@@ -167,7 +167,8 @@ var subscribeToShoppinglistUpdates = function() {
 			}],
 			"notification": { "level": "DEFAULT" }
 		},genericFailure, genericSuccess);
-	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerify", genericFailure, genericSuccess);
+		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerify", genericFailure, genericSuccess);
+	});
 };
 
 
@@ -214,9 +215,9 @@ var pushShoppingList = function(items){
 
 var pushShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, function(){
-        //glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "duppVerify", genericFailure, genericSuccess);
-        pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
-    });
+		//glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "duppVerify", genericFailure, genericSuccess);
+		pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
+	});
 };
 
 

@@ -105,7 +105,7 @@ module.exports = function(config, onNeedAuthentification) {
 			});
 	};
 
-	
+
 	glass.patchTimeline = function(errorCallback, successCallback){
 		mirror.timeline.list()
 			.withAuthClient(oauth2Client)
@@ -152,6 +152,7 @@ module.exports = function(config, onNeedAuthentification) {
 						errorCallback(err);
 					}                   
 				}else{
+					console.log("delete ITEM ID: ", itemId);
 					if(typeof successCallback == "function"){
 						successCallback(data);
 					}
@@ -171,10 +172,13 @@ module.exports = function(config, onNeedAuthentification) {
 						errorCallback(err);
 					}
 				}else{
+					var hasError = false;
 					for (var i = 0; i < data.items.length; i++) {
 						var itemId = data.items[i].id;
-						console.log("delete ITEM ID: ", itemId);
-						glass.deleteTimelineItem(itemId, errorCallback, successCallback);
+						glass.deleteTimelineItem(itemId, errorCallback);
+					}
+					if(typeof successCallback == "function"){
+						successCallback();
 					}
 				} 
 			});
