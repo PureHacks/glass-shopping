@@ -252,7 +252,7 @@ var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
 	return {
 		"bundleId": bundleId,
 		"isBundleCover" : true,
-		"html": "<article><ul><li>" + items.join("</li><li>") + "</li></ul></article>",
+		"html": "<article>" + new Date().toLocaleTimeString() + "<ul><li>" + items.join("</li><li>") + "</li></ul></article>",
 		"speakableText": "Shopping list: " + items.join(" "),
 		"notification": { "level": "DEFAULT" }
 	}
