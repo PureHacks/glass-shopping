@@ -42,7 +42,7 @@ var config = {
 	clientSecret: "mst-lDnj43oI4yj50sw1obtQ",
 	host: "localhost:5000",
 	oauth2callbackRoute : "/oauth2callback",
-	mongooseUrl : "mongodb://glass-shopping-app:7e441f609f@oceanic.mongohq.com:10074/app22628793"
+	mongooseUrl : process.env.MONGOHQ_URL || "mongodb://glass-shopping-app:7e441f609f@oceanic.mongohq.com:10074/app22628793"
 };
 
 if (process.env.NODE_ENV == "prod") {
@@ -118,6 +118,7 @@ app.get('/oauth2callback', function(req, res){
 
 
 app.post('/notify/timeline/shoppinglist', function(req, res){
+	console.log("shoppinglist");
 	var notification = req.body;
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
@@ -165,7 +166,7 @@ app.get('/clear/all', function(req, res){
 
 
 var subscribeToShoppinglistUpdates = function() {
-	//glassApi.clearTimeline(genericFailure, function(){
+	glassApi.clearTimeline(genericFailure, function(){
 		glassApi.insertTimelineItem({
 			"html": "<article>\n Subscibed to Shoppinglist</article>",
 			"speakableText": "You have subscribed for your Shoppinglist",
@@ -177,7 +178,7 @@ var subscribeToShoppinglistUpdates = function() {
 		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerify", genericFailure, function(){
 			console.log("Signed up successfully");
 		});
-	//});
+	});
 };
 
 
@@ -187,18 +188,16 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"sourceItemId" : itemName,
 		"html": "<article>" + itemName + "</article>",
 		"speakableText": "You have subscribed for your Shoppinglist",
-		"menuItems": [
-			{
+		"menuItems": [{
 				"action": "CUSTOM",
-				//"id": "GotIt",
+				"id": "GotIt",
 				"payload" : itemName,
-				//"removeWhenSelected" : true,
+				"removeWhenSelected" : true,
 				"values": [{
 					"displayName": "Got It",
 					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
 				}]
-			}
-		],
+		}],
 		"notification": { "level": "DEFAULT" }
 	};
 };
