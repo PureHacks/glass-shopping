@@ -10,7 +10,7 @@ var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
-var glassMirrorApi = require('./models/glassMirrorApi');
+var glassMirrorApi = require('./lib/glassMirrorApi');
 var _ = require('lodash');
 
 
@@ -125,15 +125,15 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 		case "CUSTOM":
 			// perform custom
 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
-				console.log("XXXXXXXXXX item to delete", data.sourceItemId);
-				//glassApi.patchTimeline
+				console.log("XXXXXXXXXX item to delete", data);
+				//glassApi.patchTimeline()()
 				glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 			});
 			break;
-		// case "DELETE":
-		// 	// perform custom
-		// 	console.log("action DELETE");
-		// 	break;
+		case "DELETE":
+			// perform custom
+			console.log("action DELETE");
+			break;
 	};
 	res.end();
 });
@@ -167,7 +167,6 @@ app.get('/clear/all', function(req, res){
 var subscribeToShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, function(){
 		glassApi.insertTimelineItem({
-			//"bundleId": "main",
 			"html": "<article>\n Subscibed to Shoppinglist</article>",
 			"speakableText": "You have subscribed for your Shoppinglist",
 			"menuItems": [{
@@ -189,7 +188,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"menuItems": [
 			{
 				"action": "CUSTOM",
-				//"id": "GotIt",
+				"id": "GotIt",
 				"payload" : itemName,
 				"removeWhenSelected" : true,
 				"values": [{
@@ -214,11 +213,11 @@ var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
 var pushShoppingList = function(items){
 	var bundleId = "ShoppinglistUpdates " +  new Date().toLocaleTimeString();
 
-	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items),genericFailure, genericSuccess);
 	for(var i = 0; i < items.length; i++){
 		console.log("insertTimelineItem");
 		glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, items[i]),genericFailure, genericSuccess);	
 	}
+	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items),genericFailure, genericSuccess);
 };
 
 
