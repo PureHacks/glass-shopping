@@ -194,8 +194,8 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 				"payload" : itemName,
 				//"removeWhenSelected" : true,
 				"values": [{
-						"displayName": "Got It",
-						"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
+					"displayName": "Got It",
+					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
 				}]
 			}
 		],
@@ -212,6 +212,8 @@ var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
 		"notification": { "level": "DEFAULT" }
 	};
 };
+
+
 var pushShoppingList = function(items){
 	var bundleId = "ShoppinglistUpdates " +  new Date().toLocaleTimeString();
 
@@ -227,6 +229,7 @@ var pushShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, function(){
 		pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
 	});
+	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerify", genericFailure, genericSuccess);
 };
 
 
