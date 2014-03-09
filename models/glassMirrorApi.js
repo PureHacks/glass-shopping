@@ -21,6 +21,9 @@ module.exports = function(config, onNeedAuthentification) {
 	
 	getMirrorReference();
 
+	/*
+	* AUTH
+	*/
 
 	glass.isAuthenticated = function(res, authenticatedCallback, notAuthenticatedCallback){
 		if (!oauth2Client.credentials){
@@ -63,6 +66,11 @@ module.exports = function(config, onNeedAuthentification) {
 	};
 
 
+	/*
+	* TIMELINE
+	*/
+
+
 	glass.listTimeline = function(errorCallback, successCallback){
 		mirror.timeline.list()
 			.withAuthClient(oauth2Client)
@@ -80,8 +88,26 @@ module.exports = function(config, onNeedAuthentification) {
 	};
 
 
-	glass.insertContact = function(contact, errorCallback, successCallback){
-		mirror.contacts.insert(contact)
+
+	glass.getTimelineItem = function(itemId, errorCallback, successCallback) {
+		mirror.timeline.get({"id": itemId})
+			.withAuthClient(oauth2Client)
+			.execute(function(err, data){
+				if (!!err){
+					if(typeof errorCallback == "function"){
+						errorCallback(err);
+					}
+				}else{
+					if(typeof successCallback == "function"){
+						successCallback(data);
+					}
+				}
+			});
+	};
+
+	
+	glass.patchTimeline = function(errorCallback, successCallback){
+		mirror.timeline.list()
 			.withAuthClient(oauth2Client)
 			.execute(function(err, data){
 				if (!!err){
@@ -114,26 +140,6 @@ module.exports = function(config, onNeedAuthentification) {
 	};
 
 
-	//TODO: need to get image from resource for this to work
-	// var insertImgTimelineItem = function(img, errorCallback, successCallback){
-	// 	var date = new Date();
-	// 	mirror.timeline.insert(
-	// 		{
-	// 			//"bundleId": "main",
-	// 			"html": "<article>\n test </br><img src=\"" + img + "\" /></article>",
-	// 			"menuItems": [{"action": "DELETE"}],
-	// 			"notification": { "level": "DEFAULT" }
-	// 		}
-	// 	)
-	// 	.withAuthClient(oauth2Client)
-	// 	.execute(function(err, data){
-	// 		if (!!err)
-	// 			errorCallback(err);
-	// 		else
-	// 			successCallback(data);
-	// 	});
-	// };
-
 
 	glass.deleteTimelineItem = function(itemId, errorCallback, successCallback) {
 		mirror.timeline.delete({
@@ -144,7 +150,7 @@ module.exports = function(config, onNeedAuthentification) {
 				if (!!err){
 					if(typeof errorCallback == "function"){
 						errorCallback(err);
-					}					
+					}                   
 				}else{
 					if(typeof successCallback == "function"){
 						successCallback(data);
@@ -152,6 +158,7 @@ module.exports = function(config, onNeedAuthentification) {
 				}
 			});
 	};
+
 
 
 	//util to clear whole timeline
@@ -174,6 +181,52 @@ module.exports = function(config, onNeedAuthentification) {
 	};
 
 
+
+	/*
+	* CONTACTS
+	*/
+	
+	glass.insertContact = function(contact, errorCallback, successCallback){
+		mirror.contacts.insert(contact)
+			.withAuthClient(oauth2Client)
+			.execute(function(err, data){
+				if (!!err){
+					if(typeof errorCallback == "function"){
+						errorCallback(err);
+					}
+				}else{
+					if(typeof successCallback == "function"){
+						successCallback(data);
+					}
+				}
+			});
+	};
+
+
+
+
+	//TODO: need to get image from resource for this to work
+	// var insertImgTimelineItem = function(img, errorCallback, successCallback){
+	// 	var date = new Date();
+	// 	mirror.timeline.insert(
+	// 		{
+	// 			//"bundleId": "main",
+	// 			"html": "<article>\n test </br><img src=\"" + img + "\" /></article>",
+	// 			"menuItems": [{"action": "DELETE"}],
+	// 			"notification": { "level": "DEFAULT" }
+	// 		}
+	// 	)
+	// 	.withAuthClient(oauth2Client)
+	// 	.execute(function(err, data){
+	// 		if (!!err)
+	// 			errorCallback(err);
+	// 		else
+	// 			successCallback(data);
+	// 	});
+	// };
+
+
+
 	glass.subscribeToNotifications = function(callbackUrl, userToken, verifyToken, errorCallback, successCallback) {
 		mirror.subscriptions.insert({
 				"collection": "timeline",
@@ -193,23 +246,6 @@ module.exports = function(config, onNeedAuthentification) {
 					}
 				}
 					
-			});
-	};
-
-
-	glass.getTimelineItem = function(itemId, errorCallback, successCallback) {
-		mirror.timeline.get({"id": itemId})
-			.withAuthClient(oauth2Client)
-			.execute(function(err, data){
-				if (!!err){
-					if(typeof errorCallback == "function"){
-						errorCallback(err);
-					}
-				}else{
-					if(typeof successCallback == "function"){
-						successCallback(data);
-					}
-				}
 			});
 	};
 

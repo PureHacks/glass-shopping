@@ -105,19 +105,20 @@ app.get('/signup', function(req, res){
 //authenticated
 app.get('/oauth2callback', function(req, res){
 	// if we're able to grab the token, redirect the user back to the main page
-	glassApi.getToken(req.query.code, genericFailure, function(){ res.redirect('/signup'); });
+	glassApi.getToken(req.query.code, genericFailure, function(){ res.redirect('/'); });
 });
 
 
 app.post('/notify/timeline/shoppinglist', function(req, res){
 	var notification = req.body;
 	var itemId = notification.itemId;
-	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist");
+	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
 	switch (notification.userActions[0].type) {
 		case "CUSTOM":
 			// perform custom
 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
                 console.log("XXXXXXXXXX item to delete", data.sourceItemId);
+                //glassApi.patchTimeline
                 glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 			});
 			break;
@@ -133,7 +134,6 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 app.get('/location/ping/:lat/:long', function(req, res){
     var latitude = req.body.lat || 43.646357;
     var longitude = req.body.long || -79.395682;
-
 
 	//todo: add location test
 	glassApi.isAuthenticated(res, pushShoppinglistUpdates);
