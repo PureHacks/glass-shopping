@@ -198,7 +198,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 				"values": [{
 					"displayName": "Got It",
 					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
-				}]}
+				}]
 		}],
 		"notification": { "level": "DEFAULT" }
 	};
