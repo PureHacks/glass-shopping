@@ -208,15 +208,14 @@ var pushShoppingList = function(items){
 
 	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items),genericFailure, genericSuccess);
 	for(var i = 0; i < items.length; i++){
-		console.log("skip insertTimelineItem");
-		//glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, items[i]),genericFailure, genericSuccess);	
+		console.log("insertTimelineItem");
+		glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, items[i]),genericFailure, genericSuccess);	
 	}
 };
 
 
 var pushShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, function(){
-		//glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "duppVerify", genericFailure, genericSuccess);
 		pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
 	});
 };
