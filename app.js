@@ -270,7 +270,7 @@ var pushShoppingList = function(items){
 var pushShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, genericSuccess);
 	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "duppVerify", genericFailure, genericSuccess);
-	pushShoppingList(["Cheese", "Salad", "Bread", "Milk"]);
+	pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
 };
 
 
