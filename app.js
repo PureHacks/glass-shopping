@@ -173,7 +173,7 @@ var subscribeToShoppinglistUpdates = function() {
 			"html": "<article>\n Subscibed to Shoppinglist</article>",
 			"speakableText": "You have subscribed for your Shoppinglist",
 			"menuItems": [{
-				"action": "CUSTOM"
+				"action": "DELETE"
 			}],
 			"notification": { "level": "DEFAULT" }
 		},genericFailure, genericSuccess);
@@ -192,11 +192,19 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"speakableText": "You have subscribed for your Shoppinglist",
 		"menuItems": [{
 				"action": "CUSTOM",
-				//"id": "GotIt",
+				"id": "GotIt",
 				"payload" : itemName,
 				"removeWhenSelected" : true,
 				"values": [{
 					"displayName": "Got It",
+					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
+				}]},{
+				"action": "DELETE",
+				"id": "GotIt-Delete",
+				"payload" : itemName,
+				"removeWhenSelected" : true,
+				"values": [{
+					"displayName": "Got It-D",
 					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
 				}]
 		}],
