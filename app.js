@@ -125,18 +125,18 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
 	switch (notification.userActions[0].type) {
-		case "CUSTOM":
+		case "DELETE":
 			// perform custom
 			glassApi.getTimelineItem(itemId, genericFailure, function(data){
 				console.log("XXXXXXXXXX item to delete", data);
 				//glassApi.patchTimeline()()
-				glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
+				//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 			});
 			break;
-		case "DELETE":
-			// perform custom
-			console.log("action DELETE");
-			break;
+		// case "DELETE":
+		// 	// perform custom
+		// 	console.log("action DELETE");
+		// 	break;
 	};
 	res.end();
 });
@@ -192,21 +192,13 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"speakableText": "You have subscribed for your Shoppinglist",
 		"menuItems": [{
 				"action": "DELETE",
-				"id": "GotIt-Delete",
+				"id": "GotIt",
 				"payload" : itemName,
-				"removeWhenSelected" : true,
+				//"removeWhenSelected" : true,
 				"values": [{
 					"displayName": "Got It",
 					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
-				}]},{
-				"action": "CUSTOM",
-				"id": "GotIt",
-				"payload" : itemName,
-				"removeWhenSelected" : true,
-				"values": [{
-					"displayName": "Got It (2)",
-					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
-				}]
+				}]}
 		}],
 		"notification": { "level": "DEFAULT" }
 	};
