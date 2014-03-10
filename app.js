@@ -125,7 +125,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
 	if(notification.userActions[0].type == "DELETE"){
-		glass.listTimeline(genericFailure, function(data){
+		glassApi.listTimeline(genericFailure, function(data){
 			console.log("listTimeline", data);
 			//glassApi.patchTimeline()()
 			//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
