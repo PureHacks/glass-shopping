@@ -126,7 +126,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	if(notification.userActions[0].type == "DELETE"){
 		//TODO: update item by itemId in DB
 		glassApi.listTimeline(genericFailure, function(data){
-			var bundleCover = _.first(data.items, "isBundleCover");
+			var bundleCover = _.first(data.items, "isBundleCover")[0];
 			console.log(bundleCover);
 			bundleCover.html = "<article>UPDATED</article>";
 			glassApi.patchTimeline(bundleCover, genericFailure, function(data){
