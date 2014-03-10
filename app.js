@@ -124,20 +124,13 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	var notification = req.body;
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
-	switch (notification.userActions[0].type) {
-		case "DELETE":
-			// perform custom
-			glass.listTimeline(genericFailure, function(data){
-				console.log("listTimeline", data);
-				//glassApi.patchTimeline()()
-				//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
-			});
-			break;
-		// case "DELETE":
-		// 	// perform custom
-		// 	console.log("action DELETE");
-		// 	break;
-	};
+	if(notification.userActions[0].type == "DELETE"){
+		glass.listTimeline(genericFailure, function(data){
+			console.log("listTimeline", data);
+			//glassApi.patchTimeline()()
+			//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
+		});
+	}
 	res.end();
 });
 
