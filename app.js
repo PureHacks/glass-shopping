@@ -127,6 +127,10 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	if(notification.userActions[0].type == "DELETE"){
 		glassApi.listTimeline(genericFailure, function(data){
 			console.log("listTimeline", data);
+			var bundleCover = _.filter(data.items, "isBundleCover")[0];
+			console.log(bundleCover);
+			bundleCover.html = "<article>UPDATED</article>"
+			glassApi.patchTimeline(bundleCover.itemId, bundleCover, genericFailure, genericSuccessNoDataLog)
 			//glassApi.patchTimeline()()
 			//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 		});
@@ -211,9 +215,9 @@ var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
 var pushShoppingList = function(items){
 	var bundleId = "ShoppinglistUpdates " +  new Date().toLocaleTimeString();
 
-	for(var i = 0; i < items.length; i++){
-		glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, items[i]),genericFailure, genericSuccess);	
-	}
+	_.forEach(items, function(item){
+		glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, item),genericFailure, genericSuccess);	
+	});
 	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items),genericFailure, genericSuccess);
 };
 
