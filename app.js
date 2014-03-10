@@ -133,7 +133,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			var shoppinListItems =  _.compact(_.pluck(data.items,"sourceItemId"));
 
 			if(bundleCover) {
-				glassApi.patchTimeline(bundleCover.id, {"html" : shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems), genericFailure, function(data){
+				glassApi.patchTimeline(bundleCover.id, {"html" : shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems)}, genericFailure, function(data){
 					console.log("patch successfull", data);
 				});
 			}
