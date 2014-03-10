@@ -129,7 +129,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			var bundleCover = _.first(data.items, "isBundleCover");
 			console.log(bundleCover);
 			bundleCover.html = "<article>UPDATED</article>";
-			glassApi.patchTimeline({"id" : bundleCover.id, "body" : { "html" : "<article>UPDATED</article>"}}, genericFailure, function(data){
+			glassApi.patchTimeline(bundleCover, genericFailure, function(data){
 				console.log("patch successfull", data);
 			});
 			//glassApi.patchTimeline({"id" : bundleCover.id, "body" : {"html" : "<article>UPDATED</article>"}}, genericFailure, genericSuccessNoDataLog);
