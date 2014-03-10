@@ -115,7 +115,9 @@ app.get('/signup', function(req, res){
 //authenticated
 app.get('/oauth2callback', function(req, res){
 	// if we're able to grab the token, redirect the user back to the main page
-	glassApi.getToken(req.query.code, genericFailure, function(){ res.redirect('/'); });
+	glassApi.getToken(req.query.code, genericFailure, function(){ 
+		res.redirect('/');
+	});
 });
 
 
@@ -127,9 +129,16 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 		//TODO: update item by itemId in DB
 		glassApi.listTimeline(genericFailure, function(data){
 			var bundleCover = _.first(data.items, "isBundleCover")[0];
-			console.log(bundleCover);
+			var items = _.map(data.items, function(item){
+				return item.sourceItemId;
+			});
+			console.log(items);
 			bundleCover.html = "<article>UPDATED</article>";
-			glassApi.patchTimeline(bundleCover, genericFailure, function(data){
+
+
+			//shoppingListTimelineCoverItemMarkup(bundleCover.bundleId)
+
+			glassApi.patchTimeline(bundleCover.id, "<article>UPDATED</article>", genericFailure, function(data){
 				console.log("patch successfull", data);
 			});
 			//glassApi.patchTimeline({"id" : bundleCover.id, "body" : {"html" : "<article>UPDATED</article>"}}, genericFailure, genericSuccessNoDataLog);
