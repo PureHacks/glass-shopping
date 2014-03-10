@@ -123,6 +123,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	var notification = req.body;
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
+	console.log("XXXXXXXXXXXXXXX");
 	if(notification.userActions[0].type == "DELETE"){
 		//TODO: update item in DB
 		glassApi.listTimeline(genericFailure, function(data){
@@ -131,7 +132,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			bundleCover = bundleCover[0];
 			//bundleCover.html = "<article>UPDATED</article>";
 			//glassApi.updateTimeline(bundleCover, genericFailure, genericSuccessNoDataLog);
-			glassApi.patchTimeline({"id" : bundleCover.id, "html" : "<article>UPDATED</article>"}, genericFailure, genericSuccessNoDataLog);
+			glassApi.patchTimeline({"id" : bundleCover.id, "body" : {"html" : "<article>UPDATED</article>"}}, genericFailure, genericSuccessNoDataLog);
 			//glassApi.patchTimeline()()
 			//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 		});
