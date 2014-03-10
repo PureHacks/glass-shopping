@@ -130,7 +130,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			var bundleCover = _.filter(data.items, "isBundleCover")[0];
 			console.log(bundleCover);
 			bundleCover.html = "<article>UPDATED</article>"
-			glassApi.patchTimeline(bundleCover.itemId, bundleCover, genericFailure, genericSuccessNoDataLog)
+			glassApi.updateTimeline(bundleCover, genericFailure, genericSuccessNoDataLog)
 			//glassApi.patchTimeline()()
 			//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 		});
