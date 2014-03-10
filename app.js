@@ -127,8 +127,8 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	switch (notification.userActions[0].type) {
 		case "DELETE":
 			// perform custom
-			glassApi.getTimelineItem(itemId, genericFailure, function(data){
-				console.log("XXXXXXXXXX item to delete", data);
+			glass.listTimeline(genericFailure, function(data){
+				console.log("listTimeline", data);
 				//glassApi.patchTimeline()()
 				//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 			});
@@ -219,7 +219,6 @@ var pushShoppingList = function(items){
 	var bundleId = "ShoppinglistUpdates " +  new Date().toLocaleTimeString();
 
 	for(var i = 0; i < items.length; i++){
-		console.log("insertTimelineItem");
 		glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, items[i]),genericFailure, genericSuccess);	
 	}
 	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items),genericFailure, genericSuccess);
