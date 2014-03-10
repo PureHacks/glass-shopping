@@ -120,17 +120,18 @@ app.get('/oauth2callback', function(req, res){
 
 
 app.post('/notify/timeline/shoppinglist', function(req, res){
-	console.log("Notify shoppinglist");
 	var notification = req.body;
 	var itemId = notification.itemId;
 	console.log("XXXXXXXXXXXXXXX /notify/timeline/shoppinglist", notification);
 	if(notification.userActions[0].type == "DELETE"){
+		//TODO: update item in DB
 		glassApi.listTimeline(genericFailure, function(data){
-			console.log("listTimeline", data);
-			var bundleCover = _.filter(data.items, "isBundleCover")[0];
+			var bundleCover = _.filter(data.items, "isBundleCover");
 			console.log(bundleCover);
-			bundleCover.html = "<article>UPDATED</article>"
-			glassApi.updateTimeline(bundleCover, genericFailure, genericSuccessNoDataLog)
+			bundleCover = bundleCover[0];
+			//bundleCover.html = "<article>UPDATED</article>";
+			//glassApi.updateTimeline(bundleCover, genericFailure, genericSuccessNoDataLog);
+			glassApi.patchTimeline({"id" : bundleCover.id, "html" : "<article>UPDATED</article>"}, genericFailure, genericSuccessNoDataLog);
 			//glassApi.patchTimeline()()
 			//glassApi.deleteTimelineItem(data.itemId, genericFailure, genericSuccessNoDataLog);
 		});
