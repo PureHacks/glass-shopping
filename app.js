@@ -151,13 +151,11 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 				return (item.itemId != itemId && !item.isBundleCover)? item.sourceItemId : false;
 			}));
 
-			console.log(bundleCover);
-			console.log("---------------");
-			console.log(shoppinListItems);
-			console.log("---------------");
+			console.log(shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems));
+
 
 			if(bundleCover) {
-				glassApi.patchTimeline(bundleCover.id, {"html" : shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems)}, genericFailure, function(data){
+				glassApi.patchTimeline(bundleCover.id, shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems), genericFailure, function(data){
 					console.log("patch successfull", data);
 				});
 			}
@@ -230,11 +228,19 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 };
 
 var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
+	var html, speakableText;
+	if(items.length>0){
+		html = "<article>" + new Date().toLocaleTimeString() + "<ul><li>" + items.join("</li><li>") + "</li></ul></article>";
+		speakableText = "Shopping list: " + items.join(" ");
+	}else{
+		html = "<article>" + new Date().toLocaleTimeString() + "<p>All Done!</p>";
+		speakableText = "Shopping list empty";
+	}
 	return {
 		"bundleId": bundleId,
 		"isBundleCover" : true,
-		"html": "<article>" + new Date().toLocaleTimeString() + "<ul><li>" + items.join("</li><li>") + "</li></ul></article>",
-		"speakableText": "Shopping list: " + items.join(" "),
+		"html": html,
+		"speakableText": speakableText,
 		"notification": { "level": "DEFAULT" }
 	};
 };
