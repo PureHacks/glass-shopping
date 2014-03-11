@@ -122,17 +122,30 @@ app.get('/oauth2callback', function(req, res){
 
 
 app.get('/test', function(req, res){
-	// glassApi.isAuthenticated(res, function(){
-	// 	glassApi.listTimeline(genericFailure, function(data){
-	// 		var bundleCover = _.first(data.items, function(item){ return !!item.isBundleCover });
-	// 		var shoppinListItems =  _.compact(_.pluck(data.items,"sourceItemId"));
-	// 		if(bundleCover) {
-	// 			glassApi.patchTimeline(bundleCover.id, {"html" : shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems)}, genericFailure, function(data){
-	// 				console.log("patch successfull", data);
-	// 			});
-	// 		}
-	// 	});
-	// });
+	glassApi.getToken(req.query.code, genericFailure, function(){ 
+		glassApi.listTimeline(genericFailure, function(data){
+			//TEST
+			var itemId = data.items[0].itemId;
+
+			var bundleCover = _.first(data.items, function(item){ return !!item.isBundleCover })[0];
+			var shoppinListItems =  _.compact(_.map(data.items, function(item){ 
+				return (item.itemId != itemId && !item.isBundleCover)? item.sourceItemId : false;
+			}));
+
+			console.log(bundleCover);
+			console.log("XXXXXXXXXX");
+			console.log(shoppinListItems);
+			console.log("XXXXXXXXXX");
+
+			if(bundleCover) {
+				var xxx = shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems);
+
+				glassApi.patchTimeline(bundleCover.id, {"html" : "<article>xxxxx</article>"}, genericFailure, function(data){
+					console.log("patch successfull", data);
+				});
+			}
+		});
+	});
 
 	res.render('signupConfirmation', { title: 'TEST' });
 	res.end();
