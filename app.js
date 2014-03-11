@@ -158,7 +158,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 
 			if(bundleCover) {
 				var xxx = shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems);
-				var durp = { "html" : xxx.html, "speakableText" : xxx.speakableText};
+				var durp ={"html" : xxx.html};
 				console.log(durp);
 
 
