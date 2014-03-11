@@ -172,7 +172,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 	return {
 		"bundleId": bundleId,
 		"sourceItemId" : itemName,
-		"html": "<article>" + itemName + "</article>",
+		"html": "<article style=\"font-size:70px;\">" + itemName + "</article>",
 		"speakableText": itemName,
 		"menuItems": [{
 				"action": "DELETE",
@@ -188,19 +188,23 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 	};
 };
 
+var formatFileName = function(name){
+	return name.toLowerCase().replace(/[^a-z0-9\-]/g,"");
+};
+
 var shoppingListTimelineCoverItemMarkup = function(bundleId, items, store){
 	store = store || "Nearby Store"
 	var html, speakableText;
 	if(items.length>0){
 		if(items.length < 4){
-			html = "<article>"+store+"<ul><li>" + items.join("</li><li>") + "</li></ul></article>";
+			html = "<article style=\"font-size:50px;\"><figure><img src=\""+hostBaseUrl+"/images/stores/" + formatFileName(store) + ".jpg\" /></figure>"+store+"<ul><li>" + items.join("</li><li>") + "</li></ul></article>";
 			speakableText = store + " shopping list: " + items.join(" ");
 		}else{
-			html = "<article>Stop by "+store+" for "+items.length+" items</article>";
+			html = "<article style=\"font-size:40px;\">Stop by "+store+" for "+items.length+" items</article>";
 			speakableText = "Stop by "+store+" for "+items.length;
 		}
 	}else{
-		html = "<article>" + store + "<p>All Done!</p></article>";
+		html = "<article style=\"font-size:70px;\">" + store + "<p>All Done!</p></article>";
 		speakableText = "Shopping list empty";
 	}
 	return {
