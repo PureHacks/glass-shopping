@@ -146,10 +146,15 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	if(notification.userActions[0].type == "DELETE"){
 		//TODO: update item by itemId in DB
 		glassApi.listTimeline(genericFailure, function(data){
-			var bundleCover = _.first(data.items, function(item){ return !item.isBundleCover })[0];
+			var bundleCover = _.first(data.items, function(item){ return !!item.isBundleCover })[0];
 			var shoppinListItems =  _.compact(_.map(data.items, function(item){ 
 				return (item.itemId != itemId && !item.isBundleCover)? item.sourceItemId : false;
 			}));
+
+			console.log(bundleCover);
+			console.log("---------------");
+			console.log(shoppinListItems);
+			console.log("---------------");
 
 			if(bundleCover) {
 				glassApi.patchTimeline(bundleCover.id, {"html" : shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems)}, genericFailure, function(data){
