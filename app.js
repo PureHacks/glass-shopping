@@ -151,12 +151,17 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 				return (item.itemId != itemId && !item.isBundleCover)? item.sourceItemId : false;
 			}));
 
-			var xxx = shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems);
-			var durp = { "html" : xxx.html, "speakableText" : xxx.speakableText};
-			console.log(durp);
-
+			console.log(bundleCover);
+			console.log("XXXXXXXXXX");
+			console.log(shoppinListItems);
+			console.log("XXXXXXXXXX");
 
 			if(bundleCover) {
+				var xxx = shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems);
+				var durp = { "html" : xxx.html, "speakableText" : xxx.speakableText};
+				console.log(durp);
+
+
 				glassApi.patchTimeline(bundleCover.id, durp, genericFailure, function(data){
 					console.log("patch successfull", data);
 				});
