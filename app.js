@@ -157,7 +157,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 
 
 			if(bundleCover) {
-				glassApi.patchTimeline(bundleCover.id, xxx, genericFailure, function(data){
+				glassApi.patchTimeline(bundleCover.id, { "html" : xxx.html, "speakableText" : xxx.speakableText}, genericFailure, function(data){
 					console.log("patch successfull", data);
 				});
 			}
