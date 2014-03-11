@@ -181,7 +181,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 				//"removeWhenSelected" : true,
 				"values": [{
 					"displayName": "Got It",
-					"iconUrl": hostBaseUrl + "/images/icon/icon-placeholder.png"
+					"iconUrl": hostBaseUrl + "/images/icon/got-it.png"
 				}]
 		}],
 		"notification": { "level": "DEFAULT" }
@@ -200,13 +200,13 @@ var shoppingListTimelineCoverItemMarkup = function(bundleId, items, store){
 			speakableText = "Stop by "+store+" for "+items.length;
 		}
 	}else{
-		html = "<article>" + new Date().toLocaleTimeString() + "<p>All Done!</p></article>";
+		html = "<article>" + store + "<p>All Done!</p></article>";
 		speakableText = "Shopping list empty";
 	}
 	return {
 		"bundleId": bundleId,
 		"sourceItemId": store,
-		"isBundleCover" : true,
+		"isBundleCover" : items.length > 0,
 		"html": html,
 		"speakableText": speakableText,
 		"notification": { "level": "DEFAULT" }
