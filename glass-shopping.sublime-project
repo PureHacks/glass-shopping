@@ -20,7 +20,7 @@
 			"folder_exclude_patterns": [
 				"target"
 				,"logs"
-				//,"node_modules"
+				,"node_modules"
 			]
 		}
 	]

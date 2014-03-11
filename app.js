@@ -104,12 +104,6 @@ app.get('/',  function(req, res){
 });
 
 
-// app.get('/signup', function(req, res){
-// 	glassApi.isAuthenticated(res, subscribeToShoppinglistUpdates);
-// 	res.render('signupConfirmation', { title: 'Signed up for Shopping list' });
-// 	res.end();
-// });
-
 //authenticated
 app.get('/oauth2callback', function(req, res){
 	// if we're able to grab the token, redirect the user back to the main page
@@ -120,27 +114,8 @@ app.get('/oauth2callback', function(req, res){
 
 
 
-app.post('/notify/timeline/shoppinglist', function(req, res){
-	var notification = req.body;
-	var itemId = notification.itemId;
-	if(notification.userActions[0].type == "DELETE"){
-		//TODO: update item by itemId in DB
-		glassApi.listTimeline(genericFailure, function(data){
-			var bundleCover = _.first(data.items, function(item){ return !!item.isBundleCover })[0];
-			var shoppinListItems =  _.compact(_.map(data.items, function(item){ 
-				return (item.itemId != itemId && !item.isBundleCover)? item.sourceItemId : false;
-			}));
 
-			if(bundleCover) {
-				glassApi.patchTimeline(bundleCover.id, shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems), genericFailure, function(data){
-					console.log("patch successfull", data);
-				});
-			}
-		});
-	}
-	res.end();
-});
-
+//to find test location 
 //http://itouchmap.com/latlong.html
 app.get('/location/ping/:lat/:long', function(req, res){
 	var latitude = req.body.lat || 43.646357;
@@ -154,8 +129,8 @@ app.get('/location/ping/:lat/:long', function(req, res){
 });
 
 
-
-app.get('/clear/all', function(req, res){
+//clear timeline
+app.get('/timeline/clear', function(req, res){
 	glassApi.isAuthenticated(res, function(){
 		glassApi.clearTimeline(genericFailure, genericSuccess);
 	});
@@ -165,6 +140,27 @@ app.get('/clear/all', function(req, res){
 
 
 
+//called by googles mirror api
+app.post('/notify/timeline/shoppinglist', function(req, res){
+	var notification = req.body;
+	var itemId = notification.itemId;
+	if(notification.userActions[0].type == "DELETE"){
+		//TODO: update item by itemId in DB
+		glassApi.listTimeline(genericFailure, function(data){
+			var bundleCover = _.first(data.items, function(item){ return !!item.isBundleCover })[0];
+			var shoppinListItems =  _.compact(_.map(data.items, function(item){ 
+				return (item.itemId != itemId && !item.isBundleCover)? item.sourceItemId : false;
+			}));
+
+			if(bundleCover) {
+				glassApi.patchTimeline(bundleCover.id, shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems, bundleCover.sourceItemId), genericFailure, function(data){
+					console.log("patch successfull", data);
+				});
+			}
+		});
+	}
+	res.end();
+});
 
 
 var subscribeToShoppinglistUpdates = function() {
@@ -177,7 +173,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 		"bundleId": bundleId,
 		"sourceItemId" : itemName,
 		"html": "<article>" + itemName + "</article>",
-		"speakableText": "You have subscribed for your Shoppinglist",
+		"speakableText": itemName,
 		"menuItems": [{
 				"action": "DELETE",
 				"id": "GotIt",
@@ -192,17 +188,24 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 	};
 };
 
-var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
+var shoppingListTimelineCoverItemMarkup = function(bundleId, items, store){
+	store = store || "Nearby Store"
 	var html, speakableText;
 	if(items.length>0){
-		html = "<article>" + new Date().toLocaleTimeString() + "<ul><li>" + items.join("</li><li>") + "</li></ul></article>";
-		speakableText = "Shopping list: " + items.join(" ");
+		if(items.length < 4){
+			html = "<article>"+store+"<ul><li>" + items.join("</li><li>") + "</li></ul></article>";
+			speakableText = store + " shopping list: " + items.join(" ");
+		}else{
+			html = "<article>Stop by "+store+" for "+items.length+" items</article>";
+			speakableText = "Stop by "+store+" for "+items.length;
+		}
 	}else{
 		html = "<article>" + new Date().toLocaleTimeString() + "<p>All Done!</p></article>";
 		speakableText = "Shopping list empty";
 	}
 	return {
 		"bundleId": bundleId,
+		"sourceItemId": store,
 		"isBundleCover" : true,
 		"html": html,
 		"speakableText": speakableText,
@@ -211,20 +214,19 @@ var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
 };
 
 
-var pushShoppingList = function(items){
+var pushShoppingList = function(items, store){
 	var bundleId = "ShoppinglistUpdates " +  new Date().toLocaleTimeString();
-
 	_.forEach(items, function(item){
 		glassApi.insertTimelineItem(shoppingListTimelineItemMarkup(bundleId, item),genericFailure, genericSuccess);	
 	});
-	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items),genericFailure, genericSuccess);
+	glassApi.insertTimelineItem(shoppingListTimelineCoverItemMarkup(bundleId, items, store),genericFailure, genericSuccess);
 };
 
 
 var pushShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, function(){
 		subscribeToShoppinglistUpdates();
-		pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
+		pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"], "Walmart");
 	});
 };
 
