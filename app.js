@@ -161,7 +161,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 				var durp ={ "body" : {"html" : xxx.html}};
 				console.log(durp);
 
-				glassApi.patchTimeline(bundleCover.id, "<article>xxxxx</article>", genericFailure, function(data){
+				glassApi.patchTimeline(bundleCover.id, {"html" : "<article>xxxxx</article>"}, genericFailure, function(data){
 					console.log("patch successfull", data);
 				});
 			}
