@@ -95,22 +95,20 @@ var genericFailure = function(data) {
 
 var glassApi = glassMirrorApi(config, authenticateApp);
 
-app.get('/', routes.index);
-
-
-app.get('/authenticate', function(req, res){
+app.get('/',  function(req, res){
 	glassApi.isAuthenticated(res, function(){
-		genericSuccess("authenticated");
+		//subscribeToShoppinglistUpdates();
+		res.render('index', { title: 'Glass Shopping List' });
+		res.end();
 	});
-	res.render('signupConfirmation', { title: 'Authenticated for Shopping list' });
-	res.end();
 });
 
-app.get('/signup', function(req, res){
-	glassApi.isAuthenticated(res, subscribeToShoppinglistUpdates);
-	res.render('signupConfirmation', { title: 'Signed up for Shopping list' });
-	res.end();
-});
+
+// app.get('/signup', function(req, res){
+// 	glassApi.isAuthenticated(res, subscribeToShoppinglistUpdates);
+// 	res.render('signupConfirmation', { title: 'Signed up for Shopping list' });
+// 	res.end();
+// });
 
 //authenticated
 app.get('/oauth2callback', function(req, res){
@@ -170,19 +168,7 @@ app.get('/clear/all', function(req, res){
 
 
 var subscribeToShoppinglistUpdates = function() {
-	glassApi.clearTimeline(genericFailure, function(){
-		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerifyxxx", genericFailure, function(){
-			console.log("Signed up successfully");
-			glassApi.insertTimelineItem({
-				"html": "<article>\n Subscibed to Shoppinglist</article>",
-				"speakableText": "You have subscribed for your Shoppinglist",
-				"menuItems": [{
-					"action": "DELETE"
-				}],
-				"notification": { "level": "DEFAULT" }
-			},genericFailure, genericSuccess);
-		});
-	});
+	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerifyxxx", genericFailure, genericSuccess);
 };
 
 
@@ -237,9 +223,9 @@ var pushShoppingList = function(items){
 
 var pushShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, function(){
+		subscribeToShoppinglistUpdates();
 		pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"]);
 	});
-	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerifyxxx", genericFailure, genericSuccess);
 };
 
 
