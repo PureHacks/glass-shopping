@@ -122,7 +122,10 @@ app.get('/oauth2callback', function(req, res){
 
 
 app.get('/test', function(req, res){
-	glassApi.getToken(req.query.code, genericFailure, function(){ 
+	console.log("TEST");
+	glassApi.isAuthenticated(res, function(){ 
+		console.log("aaaaXXXXXXXXXX");
+
 		glassApi.listTimeline(genericFailure, function(data){
 			//TEST
 			var itemId = data.items[0].itemId;
@@ -132,15 +135,17 @@ app.get('/test', function(req, res){
 				return (item.itemId != itemId && !item.isBundleCover)? item.sourceItemId : false;
 			}));
 
-			console.log(bundleCover);
+			// console.log(bundleCover);
+			// console.log("XXXXXXXXXX");
+			// console.log(shoppinListItems);
+			console.log("bbbXXXXXXXXXX");
 			console.log("XXXXXXXXXX");
-			console.log(shoppinListItems);
 			console.log("XXXXXXXXXX");
 
 			if(bundleCover) {
 				var xxx = shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems);
 
-				glassApi.patchTimeline(bundleCover.id, {"html" : "<article>xxxxx</article>"}, genericFailure, function(data){
+				glassApi.patchTimeline(bundleCover.id, xxx, genericFailure, function(data){
 					console.log("patch successfull", data);
 				});
 			}
@@ -155,7 +160,6 @@ app.get('/test', function(req, res){
 app.post('/notify/timeline/shoppinglist', function(req, res){
 	var notification = req.body;
 	var itemId = notification.itemId;
-	console.log("XXXXXXXXXXXXXXX");
 	if(notification.userActions[0].type == "DELETE"){
 		//TODO: update item by itemId in DB
 		glassApi.listTimeline(genericFailure, function(data){
@@ -164,17 +168,12 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 				return (item.itemId != itemId && !item.isBundleCover)? item.sourceItemId : false;
 			}));
 
-			console.log(bundleCover);
-			console.log("XXXXXXXXXX");
-			console.log(shoppinListItems);
-			console.log("XXXXXXXXXX");
-
 			if(bundleCover) {
 				var xxx = shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems);
-				var durp ={ "body" : {"html" : xxx.html}};
-				console.log(durp);
+				// var durp = {"html" : xxx.html , ""};
+				// console.log(durp);
 
-				glassApi.patchTimeline(bundleCover.id, {"html" : "<article>xxxxx</article>"}, genericFailure, function(data){
+				glassApi.patchTimeline(bundleCover.id, xxx, genericFailure, function(data){
 					console.log("patch successfull", data);
 				});
 			}
