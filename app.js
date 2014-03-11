@@ -121,6 +121,23 @@ app.get('/oauth2callback', function(req, res){
 });
 
 
+app.get('/test', function(req, res){
+	glassApi.isAuthenticated(res, function(){
+		glassApi.listTimeline(genericFailure, function(data){
+			var bundleCover = _.first(data.items, function(item){ return !!item.isBundleCover });
+			var shoppinListItems =  _.compact(_.pluck(data.items,"sourceItemId"));
+			if(bundleCover) {
+				glassApi.patchTimeline(bundleCover.id, {"html" : shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems)}, genericFailure, function(data){
+					console.log("patch successfull", data);
+				});
+			}
+		});
+	});
+
+	res.render('signupConfirmation', { title: 'TEST' });
+	res.end();
+});
+
 
 app.post('/notify/timeline/shoppinglist', function(req, res){
 	var notification = req.body;
@@ -132,6 +149,7 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			var bundleCover = _.first(data.items, function(item){ return !item.isBundleCover })[0];
 			var shoppinListItems =  _.compact(_.pluck(data.items,"sourceItemId"));
 
+			console.log("patch successfull", data);
 			if(bundleCover) {
 				glassApi.patchTimeline(bundleCover.id, {"html" : shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems)}, genericFailure, function(data){
 					console.log("patch successfull", data);
