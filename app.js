@@ -152,12 +152,12 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 			}));
 
 			var xxx = shoppingListTimelineCoverItemMarkup(bundleCover.bundleId, shoppinListItems);
-
-			console.log(xxx);
+			var durp = { "html" : xxx.html, "speakableText" : xxx.speakableText};
+			console.log(durp);
 
 
 			if(bundleCover) {
-				glassApi.patchTimeline(bundleCover.id, { "html" : xxx.html, "speakableText" : xxx.speakableText}, genericFailure, function(data){
+				glassApi.patchTimeline(bundleCover.id, durp, genericFailure, function(data){
 					console.log("patch successfull", data);
 				});
 			}
@@ -235,7 +235,7 @@ var shoppingListTimelineCoverItemMarkup = function(bundleId, items){
 		html = "<article>" + new Date().toLocaleTimeString() + "<ul><li>" + items.join("</li><li>") + "</li></ul></article>";
 		speakableText = "Shopping list: " + items.join(" ");
 	}else{
-		html = "<article>" + new Date().toLocaleTimeString() + "<p>All Done!</p>";
+		html = "<article>" + new Date().toLocaleTimeString() + "<p>All Done!</p></article>";
 		speakableText = "Shopping list empty";
 	}
 	return {
