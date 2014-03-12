@@ -172,7 +172,7 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 	return {
 		"bundleId": bundleId,
 		"sourceItemId" : itemName,
-		"text": "<article><section><p class=\"text-auto-size\">" + itemName + "</p></section></article>",
+		"html": "<article><section><p class=\"text-auto-size\">" + itemName + "</p></section></article>",
 		"speakableText": itemName,
 		"menuItems": [{
 				"action": "DELETE",
