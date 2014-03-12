@@ -30,17 +30,49 @@ exports.addLocation = function(req, res) {
 /**
  * return Locations of ShoppingListItems
  */
-exports.all = function(req, res) {
-	var latitude = req.params.lat;
-	var longitude = req.params.long;
+exports.allForLocation = function(req, res) {
+	var lat =  parseFloat(req.params.lat, 10);
+	var long = parseFloat(req.params.long, 10);
+	var variation = 0.003;
+	//http://itouchmap.com/latlong.html
 
-	Location.find().sort('-created').exec(function(err, location) {
-		if (err) {
-			res.render('error', {
-				status: 500
-			});
-		} else {
-			res.json([location, latitude, longitude]);
-		}
+	console.log(lat,long);
+
+	//todo m
+	Location.find({
+				latitude : {
+					$gte: lat - variation,
+					$lte : lat + variation
+				},
+				longitude : {
+					$gte: long - variation,
+					$lte : long + variation
+				}
+			})
+			.sort("name")
+			.exec(function(err, location) {
+				if (err) {
+					console.error("db query error",err);
+					res.json([err]);
+				} else {
+					res.json(location);
+				}
+	});
+};
+
+/**
+ * return Locations of ShoppingListItems
+ */
+exports.all = function(req, res) {
+	//todo m
+	Location.find()
+			.sort("name")
+			.exec(function(err, location) {
+				if (err) {
+					console.error("db query error",err);
+					res.json([err]);
+				} else {
+					res.json(location);
+				}
 	});
 };

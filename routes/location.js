@@ -11,5 +11,6 @@ module.exports = function(app, glassApi) {
 	};
 
 	app.post('/addLocation', hasAuthorization, shoppingListItem.addLocation);
-	app.get('/all/:lat/:long', hasAuthorization, shoppingListItem.all);
+	app.get('/all/:lat/:long', hasAuthorization, shoppingListItem.allForLocation);
+	app.get('/all', hasAuthorization, shoppingListItem.all);
 };
