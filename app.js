@@ -228,7 +228,7 @@ var pushShoppingList = function(items, store){
 var pushShoppinglistUpdates = function() {
 	glassApi.clearTimeline(genericFailure, function(){
 		subscribeToShoppinglistUpdates();
-		pushShoppingList(["Tomato", "Cheese", "Salad", "Bread", "Milk"], "Walmart");
+		pushShoppingList(["5 Tomatos", "Oka Cheese", "Tuna Salad with bread crumbs"], "Walmart");
 	});
 };
 
