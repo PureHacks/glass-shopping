@@ -1,0 +1,31 @@
+extends layout
+
+block content
+	h1= title
+	- if(message)
+	p= message
+	form(action="/addLocation", method="post")
+		fieldset
+			legend Add Location
+			p
+				label Location Name
+				br
+				input(name='name')
+			p
+				label Lat/long
+				br
+				input(name='latitude')
+				input(name='longitude')
+			p
+				button(type='submit') Save
+	br
+	br
+	form(action="/addListItem", method="post")
+		fieldset
+			legend Add Shopping List Item
+			p
+				label List Item Name
+				br
+				input(name='listItemName')
+			p
+				button(type='submit') Save

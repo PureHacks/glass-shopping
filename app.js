@@ -10,30 +10,13 @@ var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
-var glassMirrorApi = require('./lib/glassMirrorApi');
 var _ = require('lodash');
 
+var glassMirrorApi = require('./lib/glassMirrorApi');
 
-
-var app = express();
-
-// all environments
-app.set('port', process.env.PORT || 5000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
-
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
-
+//var shoppingListItem = require('./routes/shoppingListItem');
+require("./models/shoppingListItem");
+require("./models/location");
 
 
 var config = {
@@ -63,8 +46,40 @@ mongoose.connect(config.mongooseUrl);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
-  // yay!
+  console.log("open db connection");
 });
+
+
+
+
+var app = express();
+app.use(express.json());
+app.use(express.urlencoded());
+
+
+// all environments
+app.set('port', process.env.PORT || 5000);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.methodOverride());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
+
+// development only
+if ('development' == app.get('env')) {
+  app.use(express.errorHandler());
+}
+
+
+
+
+
+
+
 
 //called when app needs authentification
 var authenticateApp = function(res, oauth2Client){
@@ -158,6 +173,9 @@ app.post('/notify/timeline/shoppinglist', function(req, res){
 	res.end();
 });
 
+
+require("./routes/shoppingListItem")(app, glassApi);
+require("./routes/location")(app, glassApi);
 
 var subscribeToShoppinglistUpdates = function() {
 	glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerifyxxx", genericFailure, genericSuccess);
