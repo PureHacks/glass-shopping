@@ -78,6 +78,9 @@ var authenticateApp = function(res, oauth2Client){
 	res.redirect(url);
 };
 
+var glassApi = glassMirrorApi(config, authenticateApp);
+
+
 var genericSuccess = function(data) {
 	console.log('success', data);
 };
@@ -86,14 +89,10 @@ var genericSuccessNoDataLog = function() {
 	console.log('success - plain');
 };
 
-
-
 var genericFailure = function(data) {
 	console.log('failure', data);
 };
 
-
-var glassApi = glassMirrorApi(config, authenticateApp);
 
 app.get('/',  function(req, res){
 	glassApi.isAuthenticated(res, function(){
@@ -111,8 +110,6 @@ app.get('/oauth2callback', function(req, res){
 		res.redirect('/');
 	});
 });
-
-
 
 
 //to find test location 
@@ -137,7 +134,6 @@ app.get('/timeline/clear', function(req, res){
 	res.redirect('/');
 	res.end(); 
 });
-
 
 
 //called by googles mirror api
@@ -188,9 +184,11 @@ var shoppingListTimelineItemMarkup = function(bundleId, itemName){
 	};
 };
 
+
 var formatFileName = function(name){
 	return name.toLowerCase().replace(/[^a-z0-9\-]/g,"");
 };
+
 
 var shoppingListTimelineCoverItemMarkup = function(bundleId, items, store){
 	store = store || "Nearby Store"
