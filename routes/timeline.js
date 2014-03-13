@@ -1,5 +1,6 @@
 "use strict";
 
+var _ = require('lodash');
 var index = require('../controllers/index');
 
 module.exports = function(app, glassApi, genericSuccess, genericFailure, hostBaseUrl) {
@@ -38,11 +39,6 @@ module.exports = function(app, glassApi, genericSuccess, genericFailure, hostBas
 		}
 		res.end();
 	});
-
-
-	var subscribeToShoppinglistUpdates = function() {
-		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerifyxxx", genericFailure, genericSuccess);
-	};
 
 
 };

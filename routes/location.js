@@ -1,5 +1,6 @@
 "use strict";
 
+var _ = require('lodash');
 var location = require('../controllers/location');
 
 module.exports = function(app, glassApi, genericFailure, genericSuccess, hostBaseUrl) {
@@ -58,7 +59,7 @@ module.exports = function(app, glassApi, genericFailure, genericSuccess, hostBas
 		store = store || "Nearby Store"
 		var html, speakableText;
 		if(items.length>0){
-			if(items.length < 4){
+			if(items.length < 2){
 				html = "<article style=\"font-size:50px;\"><figure><img src=\""+hostBaseUrl+"/images/stores/" + formatFileName(store) + ".jpg\" /></figure><section>"+store+"<ul><li>" + items.join("</li><li>") + "</li></ul></section></article>";
 				speakableText = store + " shopping list: " + items.join(" ");
 			}else{
@@ -94,6 +95,10 @@ module.exports = function(app, glassApi, genericFailure, genericSuccess, hostBas
 			subscribeToShoppinglistUpdates();
 			pushShoppingList(["5 Tomatos", "Oka Cheese", "Tuna Salad with bread crumbs"], "Walmart");
 		});
+	};
+
+	var subscribeToShoppinglistUpdates = function() {
+		glassApi.subscribeToNotifications(hostBaseUrl + "/notify/timeline/shoppinglist", "shoppinglistInteraction", "durpVerifyxxx", genericFailure, genericSuccess);
 	};
 
 };
