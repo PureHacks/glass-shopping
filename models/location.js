@@ -35,10 +35,10 @@ var LocationSchema = new Schema({
 // /**
 //  * Statics
 // */
-// ShoppingListItemSchema.statics.load = function(id, cb) {
-// 	this.findOne({
-// 		_id: id
-// 	}).exec(cb);
-// };
+LocationSchema.statics.load = function(id, cb) {
+	this.findOne({
+		_id: id
+	}).exec(cb);
+};
 
 mongoose.model('Location', LocationSchema);

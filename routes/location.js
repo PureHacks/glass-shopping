@@ -13,7 +13,7 @@ module.exports = function(app, glassApi, genericFailure, genericSuccess, hostBas
 
 	app.post('/addLocation', hasAuthorization, location.addLocation);
 	app.get('/all/:lat/:long', hasAuthorization, location.allForLocation);
-	app.get('/all', hasAuthorization, location.all);
+	app.get('/all', hasAuthorization, location.allJson);
 
 	//to find test location 
 	//http://itouchmap.com/latlong.html

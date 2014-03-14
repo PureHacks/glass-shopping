@@ -9,13 +9,13 @@ block content
 			legend Add Location
 			p
 				label Location Name
-				br
-				input(name='name')
+					br
+					input(name='name')
 			p
 				label Lat/long
-				br
-				input(name='latitude')
-				input(name='longitude')
+					br
+					input(name='latitude')
+					input(name='longitude')
 			p
 				button(type='submit') Save
 	br
@@ -25,7 +25,25 @@ block content
 			legend Add Shopping List Item
 			p
 				label List Item Name
-				br
-				input(name='listItemName')
+					br
+					input(name='name')
 			p
+				label Location
+					br
+					select(name="location")
+						option(value="") All
+						- if(locations){
+						each location in locations
+							option(value= location.id)= location.name
+						-}
+		p
 				button(type='submit') Save
+	h1 Existing items
+	p
+		- if(shoppingListItems){
+		ul
+		each shoppingListItem in shoppingListItems
+			li= shoppingListItem.name
+				br
+				= shoppingListItem
+		-}

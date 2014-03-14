@@ -7,6 +7,7 @@
 
 var mongoose = require('mongoose');
 var Location = mongoose.model('Location');
+var glassApi = require('../lib/glassMirrorApi')()
 var _ = require('lodash');
 
 
@@ -21,7 +22,7 @@ exports.addLocation = function(req, res) {
 		}else{
 			return res.render('addListItem', {
 				user: "Success",
-				message: "Location added."
+				message: req.body.name + " added."
 			});
 		}
 	});
@@ -63,8 +64,8 @@ exports.allForLocation = function(req, res) {
 /**
  * return Locations of ShoppingListItems
  */
-exports.all = function(req, res) {
-	//todo m
+exports.allJson = function(req, res) {
+
 	Location.find()
 			.sort("name")
 			.exec(function(err, location) {

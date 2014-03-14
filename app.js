@@ -12,11 +12,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 var _ = require('lodash');
 
-var glassMirrorApi = require('./lib/glassMirrorApi');
 
-//var shoppingListItem = require('./routes/shoppingListItem');
-require("./models/shoppingListItem");
-require("./models/location");
 
 
 var config = {
@@ -73,7 +69,6 @@ if ('development' == app.get('env')) {
 }
 
 
-
 //called when app needs authentification
 var authenticateApp = function(res, oauth2Client){
 	// generates a url that allows offline access and asks permissions
@@ -86,7 +81,14 @@ var authenticateApp = function(res, oauth2Client){
 	res.redirect(url);
 };
 
-var glassApi = glassMirrorApi(config, authenticateApp);
+var glassApi = require('./lib/glassMirrorApi')(config, authenticateApp);
+
+
+//var shoppingListItem = require('./routes/shoppingListItem');
+require("./models/shoppingListItem");
+require("./models/location");
+
+
 
 var genericSuccess = function(data) {
 	console.log('success', data);
