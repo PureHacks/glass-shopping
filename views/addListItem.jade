@@ -4,7 +4,7 @@ block content
 	h1= title
 	- if(message)
 	p= message
-	form(action="/addLocation", method="post")
+	form(action="/locations/add", method="post")
 		fieldset
 			legend Add Location
 			p
@@ -20,7 +20,7 @@ block content
 				button(type='submit') Save
 	br
 	br
-	form(action="/addListItem", method="post")
+	form(action="/listitems/add", method="post")
 		fieldset
 			legend Add Shopping List Item
 			p

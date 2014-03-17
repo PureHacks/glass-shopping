@@ -23,10 +23,10 @@ var ShoppingListItemSchema = new Schema({
 		default: '',
 		trim: true
 	},
-	location: {
+	location: [{
 		type: Schema.ObjectId,
 		ref: 'Location'
-	}
+	}]
 });
 
 

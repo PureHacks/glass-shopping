@@ -11,9 +11,9 @@ module.exports = function(app, glassApi) {
 	};
 
 	//app.put('/tabs/:tabId', authorization.requiresLogin, hasAuthorization, tabs.update);
-	app.get('/shoppingList/:lat/:long', shoppingListItem.all);
-	app.get('/addListItem', hasAuthorization, shoppingListItem.addListItemForm);
-	app.post('/addListItem', hasAuthorization, shoppingListItem.addListItem);
-	app.get('/all2', shoppingListItem.all);
+	app.get('/listitems/all/:lat/:long', shoppingListItem.all);
+	app.get('/listitems/add', hasAuthorization, shoppingListItem.addListItemForm);
+	app.post('/listitems/add', hasAuthorization, shoppingListItem.addListItem);
+	//app.get('/all/:lat/:long', shoppingListItem.all);
 	//app.post('/addLocation', hasAuthorization, shoppingListItem.addLocation);
 };

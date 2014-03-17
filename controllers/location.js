@@ -10,6 +10,14 @@ var Location = mongoose.model('Location');
 var glassApi = require('../lib/glassMirrorApi')()
 var _ = require('lodash');
 
+//generic response handler
+var onDbError = function(err){
+	console.error("db query error",err);
+	res.render('error', {
+		status: 500
+	});
+};
+
 
 exports.addLocation = function(req, res) {
 	var location = new Location(req.body);
@@ -52,12 +60,10 @@ exports.allForLocation = function(req, res) {
 			})
 			.sort("name")
 			.exec(function(err, location) {
-				if (err) {
-					console.error("db query error",err);
-					res.json([err]);
-				} else {
-					res.json(location);
+				if(err) {
+					return onDbError(err); 
 				}
+				res.json(location);
 	});
 };
 
@@ -65,15 +71,15 @@ exports.allForLocation = function(req, res) {
  * return Locations of ShoppingListItems
  */
 exports.allJson = function(req, res) {
-
+//'ShoppingListItemSchema', 'name'
 	Location.find()
 			.sort("name")
+			//.populate({ path: 'shoppingListItem', match: { id : id }, select: 'name' })
+			//{ path: 'company', match: { x: 1 }, select: 'name' }
 			.exec(function(err, location) {
-				if (err) {
-					console.error("db query error",err);
-					res.json([err]);
-				} else {
-					res.json(location);
+				if(err) {
+					return onDbError(err); 
 				}
+				res.json(location);
 	});
 };

@@ -56,13 +56,20 @@ exports.addListItemForm = function(req, res, next) {
  * return ShoppingList of ShoppingListItems with location
  */
 exports.all = function(req, res) {
-	var latitude = req.params.lat;
-	var longitude = req.params.long;
-	//.populate({ path: 'location', model: 'override'}).
-	ShoppingListItem.find().sort('-created').populate('location', 'name latitude longitude').exec(function(err, shoppingList){
+	var lat =  parseFloat(req.params.lat, 10);
+	var long = parseFloat(req.params.long, 10);
+	var variation = 0.003;
+	//http://itouchmap.com/latlong.html
+
+	ShoppingListItem.find().sort('-created').populate('location', 'name latitude longitude').exec(function(err, shoppingListItems){
 		if(err) {
 			return onDbError(err); 
 		}
-		res.json([shoppingList]);
+		
+		res.json(_.filter(shoppingListItems, function(shoppingListItem){
+			return _.filter(shoppingListItem.location, function(location) {
+						return location.latitude > lat - variation && location.latitude < lat + variation && location.longitude > long - variation && location.longitude < long + variation;
+					}).length > 0;
+		}));
 	});
 };
