@@ -38,7 +38,28 @@ var LocationSchema = new Schema({
 LocationSchema.statics.load = function(id, cb) {
 	this.findOne({
 		_id: id
-	}).exec(cb);
+	}).exec(function(err, location){
+		if(err) {
+			throw "LocationSchema > DB ERROR: " + err;
+		}
+
+		cb(err, location);
+	});
 };
+
+
+LocationSchema.statics.all = function(cb) {
+	this.find()
+		.sort('name')
+		.exec(function(err, locations){
+			if(err) {
+				throw "LocationSchema > DB ERROR: " + err;
+			}
+
+			cb(err, locations);
+		});
+};
+
+
 
 mongoose.model('Location', LocationSchema);

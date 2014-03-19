@@ -12,7 +12,10 @@ module.exports = function(app, glassApi, genericFailure, genericSuccess, hostBas
 	};
 
 	app.post('/locations/add', hasAuthorization, location.addLocation);
-	//app.get('/all/:lat/:long', hasAuthorization, location.allForLocation);
+	app.post('/locations/remove', hasAuthorization, function(){
+		console.log("NOT IMPLEMENTED", arguments);
+
+	});
 	app.get('/locations/all', hasAuthorization, location.allJson);
 
 	//to find test location 

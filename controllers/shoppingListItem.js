@@ -8,6 +8,7 @@
 var mongoose = require('mongoose');
 var ShoppingListItem = mongoose.model('ShoppingListItem');
 var Location = mongoose.model('Location');
+var async = require('async');
 var _ = require('lodash');
 
 //generic response handler
@@ -37,39 +38,40 @@ exports.addListItem = function(req, res) {
 };
 
 exports.addListItemForm = function(req, res, next) {
-	Location.find().sort("name").exec(function(err, locations){
-		if(err) {
-			return onDbError(err); 
-		}
-		ShoppingListItem.find().sort("name").exec(function(err, shoppingListItems){
-			if(err) {
-				return onDbError(err); 
+	var shoppingListItems, locations;
+
+		async.parallel([
+			function(cb){
+				ShoppingListItem.all(cb);
+			},
+			function(cb){
+				Location.all(cb);
 			}
-			res.render('addListItem', { title: 'Add new List Item', locations: locations, shoppingListItems: shoppingListItems });
+		], function(err, result){
+			res.render('addListItem', { 
+				title: 'Add new List Item',
+				shoppingListItems: result[0],
+				locations: result[1]
+			});
 			res.end();
 		});
-	});
-	
 };
 
 /**
- * return ShoppingList of ShoppingListItems with location
+ * return ShoppingList items of ShoppingListItems with location in the range around the lat/long 
+ */
+exports.allByLatLong = function(req, res) {
+	var fuzzinessRange = 0.003;
+	ShoppingListItem.allByLatLong(req.params.lat, req.params.long, fuzzinessRange, function(err, shoppingListItems){
+		res.json(shoppingListItems);
+	});
+};
+
+/**
+ * return all ShoppingList itmems of ShoppingListItems with location
  */
 exports.all = function(req, res) {
-	var lat =  parseFloat(req.params.lat, 10);
-	var long = parseFloat(req.params.long, 10);
-	var variation = 0.003;
-	//http://itouchmap.com/latlong.html
-
-	ShoppingListItem.find().sort('-created').populate('location', 'name latitude longitude').exec(function(err, shoppingListItems){
-		if(err) {
-			return onDbError(err); 
-		}
-		
-		res.json(_.filter(shoppingListItems, function(shoppingListItem){
-			return _.filter(shoppingListItem.location, function(location) {
-						return location.latitude > lat - variation && location.latitude < lat + variation && location.longitude > long - variation && location.longitude < long + variation;
-					}).length > 0;
-		}));
+	ShoppingListItem.all(function(err, shoppingListItems){
+		res.json(shoppingListItems);
 	});
 };

@@ -4,6 +4,17 @@ block content
 	h1= title
 	- if(message)
 	p= message
+
+
+	h2 Locations
+	form(action="/locations/remove", method="post")
+		- if(locations){
+		ul
+		each location in locations
+			li
+				b= location.name
+				button(name="delete" class="delete" value=location._id) X		
+		-}
 	form(action="/locations/add", method="post")
 		fieldset
 			legend Add Location
@@ -18,8 +29,16 @@ block content
 					input(name='longitude')
 			p
 				button(type='submit') Save
-	br
-	br
+	h2 Items to buy
+	form(action="/locations/remove", method="post")
+		- if(shoppingListItems){
+		ul
+		each shoppingListItem in shoppingListItems
+			li
+				b= shoppingListItem.name 
+				span(class="location")= " (" + shoppingListItem.location.map(function(location){ return location.name;}).join(", ") + ")"
+				
+		-}
 	form(action="/listitems/add", method="post")
 		fieldset
 			legend Add Shopping List Item
@@ -38,12 +57,3 @@ block content
 						-}
 		p
 				button(type='submit') Save
-	h1 Existing items
-	p
-		- if(shoppingListItems){
-		ul
-		each shoppingListItem in shoppingListItems
-			li= shoppingListItem.name
-				br
-				= shoppingListItem
-		-}

@@ -11,7 +11,8 @@
     "logfmt": "~0.18.1",
     "googleapis": "~0.4.7",
     "mongoose": "~3.8.8",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "async": "~0.2.10"
   },
   "engines": {
     "node": "0.10.x"
