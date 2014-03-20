@@ -11,12 +11,9 @@ module.exports = function(app, glassApi, genericFailure, genericSuccess, hostBas
 		});
 	};
 
-	app.post('/locations/add', hasAuthorization, location.addLocation);
-	app.post('/locations/remove', hasAuthorization, function(){
-		console.log("NOT IMPLEMENTED", arguments);
-
-	});
 	app.get('/locations/all', hasAuthorization, location.allJson);
+	app.post('/locations/add', hasAuthorization, location.add);
+	app.post('/locations/remove', hasAuthorization, location.delete);
 
 	//to find test location 
 	//http://itouchmap.com/latlong.html

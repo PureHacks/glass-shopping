@@ -19,20 +19,30 @@ var onDbError = function(err){
 };
 
 
-exports.addLocation = function(req, res) {
+exports.add = function(req, res, next) {
 	var location = new Location(req.body);
 	location.save(function(err) {
 		if (err) {
-			return res.render('addListItem', {
-				user: "Error",
-				message: "Could not add Location."
-			});
+			res.redirect('/shoppinglist/manage?error=location-add');
 		}else{
-			return res.render('addListItem', {
-				user: "Success",
-				message: req.body.name + " added."
-			});
+			res.redirect('/shoppinglist/manage?success=location-add&name=' + req.body.name);
 		}
+		res.end();
+	});
+};
+
+
+
+exports.delete = function(req, res) {
+	Location.load(req.body.delete, function(err, location) {
+		location.remove(function(err){
+			if (err) {
+				res.redirect('/shoppinglist/manage?error=location-delete');
+			}else{
+				res.redirect('/shoppinglist/manage?success=location-delete');
+			}
+			res.end();
+		});
 	});
 };
 
@@ -43,5 +53,6 @@ exports.addLocation = function(req, res) {
 exports.allJson = function(req, res) {
 	Location.all(function(err, location) {
 		res.json(location);
+		res.end();
 	});
 };

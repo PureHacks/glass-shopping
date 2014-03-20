@@ -10,11 +10,7 @@ module.exports = function(app, glassApi) {
 		});
 	};
 
-	//app.put('/tabs/:tabId', authorization.requiresLogin, hasAuthorization, tabs.update);
-	app.get('/listitems/all/:lat/:long', shoppingListItem.allByLatLong);
-	app.get('/listitems/all', shoppingListItem.all);
-	app.get('/listitems/add', hasAuthorization, shoppingListItem.addListItemForm);
-	app.post('/listitems/add', hasAuthorization, shoppingListItem.addListItem);
-	//app.get('/all/:lat/:long', shoppingListItem.all);
-	//app.post('/addLocation', hasAuthorization, shoppingListItem.addLocation);
+	app.get('/listitems/all', hasAuthorization, shoppingListItem.allJson);
+	app.post('/listitems/remove', hasAuthorization, shoppingListItem.delete);
+	app.post('/listitems/add', hasAuthorization, hasAuthorization, shoppingListItem.add);
 };

@@ -13,7 +13,7 @@ block content
 		each location in locations
 			li
 				b= location.name
-				button(name="delete" class="delete" value=location._id) X		
+				button(name="delete" class="delete" value=location._id) X
 		-}
 	form(action="/locations/add", method="post")
 		fieldset
@@ -30,13 +30,14 @@ block content
 			p
 				button(type='submit') Save
 	h2 Items to buy
-	form(action="/locations/remove", method="post")
+	form(action="/listitems/remove", method="post")
 		- if(shoppingListItems){
 		ul
 		each shoppingListItem in shoppingListItems
 			li
 				b= shoppingListItem.name 
 				span(class="location")= " (" + shoppingListItem.location.map(function(location){ return location.name;}).join(", ") + ")"
+				button(name="delete" class="delete" value=shoppingListItem._id) X
 				
 		-}
 	form(action="/listitems/add", method="post")
@@ -55,5 +56,5 @@ block content
 						each location in locations
 							option(value= location.id)= location.name
 						-}
-		p
-				button(type='submit') Save
+			p
+					button(type='submit') Save

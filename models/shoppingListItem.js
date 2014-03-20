@@ -49,7 +49,6 @@ ShoppingListItemSchema.statics.load = function(id, cb) {
 
 
 ShoppingListItemSchema.statics.all = function(cb) {
-	console.log(this);
 	this.find()
 		.sort('-created')
 		.populate('location', 'name latitude longitude')
@@ -64,7 +63,6 @@ ShoppingListItemSchema.statics.all = function(cb) {
 
 
 ShoppingListItemSchema.statics.allByLatLong = function(lat, long, fuzziness, cb) {
-
 	lat =  parseFloat(lat, 10);
 	long = parseFloat(long, 10);
 	fuzziness = parseFloat(fuzziness, 10);

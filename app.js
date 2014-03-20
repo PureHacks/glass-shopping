@@ -104,6 +104,7 @@ var genericFailure = function(data) {
 
 
 require("./routes/index")(app, glassApi, genericSuccess, genericFailure);
+require("./routes/shoppingList")(app, glassApi);
 require("./routes/shoppingListItem")(app, glassApi);
 require("./routes/timeline")(app, glassApi, genericSuccess, genericFailure, hostBaseUrl);
 require("./routes/location")(app, glassApi, genericFailure, genericSuccess, hostBaseUrl);
