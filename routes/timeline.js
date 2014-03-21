@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var index = require('../controllers/index');
 
-module.exports = function(app, glassApi, genericSuccess, genericFailure, hostBaseUrl) {
+module.exports = function(app, glassApi, genericFailure, genericSuccess, hostBaseUrl) {
 
 	var hasAuthorization = function(req, res, next){
 		glassApi.isAuthenticated(res, function(){

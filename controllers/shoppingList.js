@@ -67,10 +67,18 @@ exports.manage = function(req, res) {
 /**
  * return ShoppingList items of ShoppingListItems with location in the range around the lat/long 
  */
-exports.allByLatLong = function(req, res) {
+exports.allByLatLong = function(req, res, next) {
 	var fuzzinessRange = 0.003;
 	ShoppingListItem.allByLatLong(req.params.lat, req.params.long, fuzzinessRange, function(err, shoppingListItems){
-		res.json(shoppingListItems);
-		res.end();
+		req.shoppingListItems = shoppingListItems;
+		req.shoppingListItemsNames = shoppingListItems.map(function(shoppingListItem){
+			return shoppingListItem.name;
+		});
+		req.locations = _.uniq(_.flatten(shoppingListItems.map(function(shoppingListItem){
+			return shoppingListItem.location.map(function(loc){
+				return loc.name
+			});
+		})));
+		next();
 	});
 };

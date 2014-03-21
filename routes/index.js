@@ -5,7 +5,7 @@
  */
 var index = require('../controllers/index');
 
-module.exports = function(app, glassApi, genericSuccess, genericFailure) {
+module.exports = function(app, glassApi, genericFailure, genericSuccess) {
 
 	var hasAuthorization = function(req, res, next){
 		glassApi.isAuthenticated(res, function(){

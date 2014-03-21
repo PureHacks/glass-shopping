@@ -7,7 +7,6 @@
 
 var mongoose = require('mongoose');
 var Location = mongoose.model('Location');
-var glassApi = require('../lib/glassMirrorApi')()
 var _ = require('lodash');
 
 //generic response handler
