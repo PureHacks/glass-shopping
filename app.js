@@ -15,21 +15,22 @@ var _ = require('lodash');
 
 
 
+//change to your setting
 var config = {
 	displayName: "devlist update",
-	clientID: "755482469248-q08tbvotf1f62fd4guhv7riqo9bnhth7.apps.googleusercontent.com",
-	clientSecret: "mst-lDnj43oI4yj50sw1obtQ",
+	clientID: "xxxxxxxx.apps.googleusercontent.com",
+	clientSecret: "xxxxxxxx",
 	host: "localhost:5000",
 	oauth2callbackRoute : "/oauth2callback",
-	mongooseUrl : process.env.MONGOHQ_URL || "mongodb://glass-shopping-app:7e441f609f@oceanic.mongohq.com:10074/app22628793"
+	mongooseUrl : process.env.MONGOHQ_URL || "mongodb://glass-shopping-app:7e441f609f@oceanic.mongohq.com:xxxxx/xxxxxxx"
 };
 
 if (process.env.NODE_ENV == "prod") {
 	config = _.extend(config, {
 		displayName: "shoppinglist update",
-		clientID: "716645361625-j2vb7jg318uo6nu44rkjgu8b7letfvjc.apps.googleusercontent.com",
-		clientSecret: "iUG7BPRnAy_NNE8BDmdp5n_8",
-		host: "glass-shopping.herokuapp.com"
+		clientID: "xxxxxxxxx.apps.googleusercontent.com",
+		clientSecret: "xxxxxxxxxx",
+		host: "your_url.herokuapp.com"
 	});
 }
 
